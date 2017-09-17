@@ -53,12 +53,28 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="779dp"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=""/>
+            android:layout_marginLeft="125dp"
+            android:layout_marginTop="230dp"
+            android:id="@+id/temptext"
+            android:text="Wuasta: Try scrolling m8"/>
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.BottomNavigationView
+        xmlns:design="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom"
+        design:menu="@menu/bottom_nav_items"
+        design:itemTextColor="@color/selectcolortext"
+        design:itemIconTint="@color/selectcolor"
+        android:background="@color/colorPrimary"
+        />
+
 </android.support.design.widget.CoordinatorLayout>
