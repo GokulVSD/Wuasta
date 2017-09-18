@@ -1,16 +1,10 @@
 package com.walarm.wuasta;
 
-import android.graphics.Typeface;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenu;
-import android.support.design.internal.BottomNavigationMenuView;
+import android.support.v4.app.Fragment;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
-import android.text.style.TypefaceSpan;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -21,17 +15,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         BottomNavigationView mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
-                ((TextView)findViewById(R.id.temptext)).setText(item.getTitle().toString()+": Try scrolling m8");
-
+                selectFrag(item);
                 return true;
             }
         });
+        MenuItem mDefault;
+        mDefault = mBottomNav.getMenu().getItem(0);
+        selectFrag(mDefault);
 
+    }
+    private void selectFrag(MenuItem item){
+
+        Fragment frag = null;
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_wuasta:
+                frag = new wuastaFragment();
+                break;
+            case R.id.menu_create:
+                frag = new createFragment();
+                break;
+            case R.id.menu_settings:
+                frag = new settingsFragment();
+                break;
+        }
+
+        ((TextView)findViewById(R.id.title)).setText(item.getTitle());
+
+        if(frag != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container, frag);
+            ft.commit();
+
+        }
     }
 }
