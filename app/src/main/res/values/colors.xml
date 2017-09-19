@@ -5,4 +5,7 @@
     <color name="colorAccent">#355c7d</color>
     <color name="selecttext">#e07925</color>
     <color name="select">#e07925</color>
+    <color name="greyText">#B0BEC5</color>
+    <color name="assistantCard">#90A4AE</color>
+    <color name="emphasize">#546E7A</color>
 </resources>

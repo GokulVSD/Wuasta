@@ -7,8 +7,8 @@
         android:icon="@drawable/actionbarwuasta"
         />
     <item
-        android:id="@+id/menu_create"
-        android:title="Create"
+        android:id="@+id/menu_modify"
+        android:title="Modify"
         android:icon="@drawable/ic_alarm_black_24dp"
         />
 

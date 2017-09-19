@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_wuasta:
                 frag = new wuastaFragment();
                 break;
-            case R.id.menu_create:
-                frag = new createFragment();
+            case R.id.menu_modify:
+                frag = new modifyFragment();
                 break;
             case R.id.menu_settings:
                 frag = new settingsFragment();
