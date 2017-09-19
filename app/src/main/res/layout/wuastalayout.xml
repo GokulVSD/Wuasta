@@ -25,6 +25,8 @@
         app:layout_constraintBottom_toTopOf="@+id/card_view" />
 
     <android.support.v7.widget.CardView
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/wuastaCard"
         android:layout_width="375dp"
         android:layout_height="265dp"
@@ -146,6 +148,8 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/weatherCard"
         android:layout_width="375dp"
         android:layout_height="200dp"
