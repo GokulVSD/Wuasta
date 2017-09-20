@@ -8,4 +8,5 @@
     <color name="greyText">#B0BEC5</color>
     <color name="assistantCard">#90A4AE</color>
     <color name="emphasize">#546E7A</color>
+    <color name="timepicker">#ECEFF1</color>
 </resources>
