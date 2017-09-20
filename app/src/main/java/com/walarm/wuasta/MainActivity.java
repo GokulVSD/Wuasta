@@ -10,13 +10,16 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private BottomNavigationView mBottomNav;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        BottomNavigationView mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
+        mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -26,11 +29,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        MenuItem mDefault;
-        mDefault = mBottomNav.getMenu().getItem(0);
-        selectFrag(mDefault);
+
+        MenuItem selectedItem = mBottomNav.getMenu().getItem(0);
+        selectFrag(selectedItem);
 
     }
+
+
+
     private void selectFrag(MenuItem item){
 
         Fragment frag = null;
@@ -38,17 +44,20 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.menu_wuasta:
+                ((TextView)findViewById(R.id.title)).setText("Wuasta");
                 frag = new wuastaFragment();
                 break;
             case R.id.menu_modify:
+                ((TextView)findViewById(R.id.title)).setText("Modify");
                 frag = new modifyFragment();
                 break;
             case R.id.menu_settings:
+                ((TextView)findViewById(R.id.title)).setText("Settings");
                 frag = new settingsFragment();
                 break;
         }
 
-        ((TextView)findViewById(R.id.title)).setText(item.getTitle());
+
 
         if(frag != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
