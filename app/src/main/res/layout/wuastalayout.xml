@@ -18,24 +18,23 @@
         android:textSize="22sp"
         android:textColor="@color/greyText"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="0dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/card_view" />
+        android:layout_marginStart="16dp" />
 
     <android.support.v7.widget.CardView
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/wuastaCard"
         android:layout_width="375dp"
-        android:layout_height="265dp"
+        android:layout_height="250dp"
         app:cardCornerRadius="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.111">
+        app:layout_constraintVertical_bias="0.08">
 
 
         <android.support.constraint.ConstraintLayout
@@ -52,7 +51,7 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintRight_toLeftOf="@+id/textView2"
                 android:layout_marginRight="2dp"
-                tools:layout_editor_absoluteX="111dp" />
+                android:layout_marginEnd="2dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -84,7 +83,9 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintHorizontal_bias="0.567"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="71dp" />
+                android:layout_marginTop="71dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,7 +114,8 @@
                 app:layout_constraintLeft_toRightOf="@+id/textView3"
                 android:layout_marginLeft="24dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="71dp" />
+                android:layout_marginTop="71dp"
+                android:layout_marginStart="24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,7 +142,6 @@
                 android:text="8:17 AM"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="0dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
                 app:layout_constraintHorizontal_bias="0.497" />
 
@@ -152,13 +153,13 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:id="@+id/weatherCard"
         android:layout_width="375dp"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         app:cardCornerRadius="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.734">
+        app:layout_constraintVertical_bias="0.65">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -173,7 +174,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintRight_toLeftOf="@+id/textView2"
                 android:layout_marginRight="3dp"
-                tools:layout_editor_absoluteX="114dp" />
+                android:layout_marginEnd="3dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -205,7 +206,9 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintHorizontal_bias="0.642"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="71dp" />
+                android:layout_marginTop="71dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -217,7 +220,6 @@
                 android:text="AT"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 android:layout_marginTop="38dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 android:id="@+id/textView3" />
@@ -237,7 +239,9 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/textView3"
                 android:layout_marginLeft="8dp"
-                app:layout_constraintHorizontal_bias="0.495" />
+                app:layout_constraintHorizontal_bias="0.495"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -253,8 +257,10 @@
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="131dp"
-                app:layout_constraintHorizontal_bias="1.0" />
+                android:layout_marginTop="125dp"
+                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="7dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -268,15 +274,64 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintHorizontal_bias="0.623"
                 android:id="@+id/textView5"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="6dp"
                 app:layout_constraintVertical_bias="0.365"
-                android:layout_marginRight="8dp" />
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/navigationCard"
+        android:layout_width="375dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.856">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/navigationcard"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintRight_toLeftOf="@+id/textView2"
+                android:layout_marginRight="3dp"
+                android:layout_marginEnd="3dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Directions"
+                android:textColor="@color/assistantCard"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.498" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
 
 
 </android.support.constraint.ConstraintLayout>
