@@ -258,7 +258,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.514">
+        app:layout_constraintVertical_bias="0.509"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -292,14 +293,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:id="@+id/textView9" />
 
             <ToggleButton
                 android:id="@+id/fiveone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="-1dp"
-                android:layout_marginTop="72dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
                 android:fontFamily="sans-serif-condensed"
@@ -309,15 +309,15 @@
                 android:textOn="+5"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="74dp"
+                app:layout_constraintRight_toLeftOf="@+id/tenone"
+                android:layout_marginRight="1dp" />
 
             <ToggleButton
                 android:id="@+id/tenone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="72dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
                 android:fontFamily="sans-serif-condensed"
@@ -327,17 +327,26 @@
                 android:textOn="+10"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toRightOf="@+id/fiveone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintRight_toLeftOf="@+id/view"
+                android:layout_marginRight="-7dp" />
+
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="@color/emphasize"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                android:id="@+id/view" />
 
             <ToggleButton
                 android:id="@+id/fifteenone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
-                android:layout_marginTop="72dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
                 android:fontFamily="sans-serif-condensed"
@@ -347,16 +356,17 @@
                 android:textOn="+15"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@+id/tenone"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintLeft_toRightOf="@+id/view"
+                android:layout_marginLeft="1dp" />
 
             <ToggleButton
                 android:id="@+id/thirtyone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="-4dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="74dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
                 android:fontFamily="sans-serif-condensed"
@@ -366,10 +376,15 @@
                 android:textOn="+30"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintLeft_toRightOf="@+id/fifteenone"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/guideline"
+                app:layout_constraintGuide_begin="20dp"
+                android:orientation="vertical" />
 
 
         </android.support.constraint.ConstraintLayout>

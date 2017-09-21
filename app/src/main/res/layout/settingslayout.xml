@@ -10,7 +10,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/chooseLocationCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="160dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -32,65 +32,76 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="31dp"
-                android:layout_marginTop="43dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="HOME"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintLeft_toRightOf="@+id/view2"
+                android:layout_marginLeft="31dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="39dp" />
+
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                android:id="@+id/view2"
+                android:layout_marginTop="22dp"
+                app:layout_constraintTop_toBottomOf="@+id/changelocations" />
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                android:layout_marginTop="38dp"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                android:id="@+id/view3" />
 
             <Button
                 android:id="@+id/changeworklocationbutton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="71dp"
-                android:layout_marginTop="0dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="WORK"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.319"
-                app:layout_constraintLeft_toRightOf="@+id/textView6"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/changehomelocationbutton"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintLeft_toRightOf="@+id/view3"
+                android:layout_marginLeft="31dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/changehomelocationbutton" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="SET HOME"
                 android:textColor="@color/assistantCard"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.242"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintRight_toLeftOf="@+id/view2"
+                android:layout_marginRight="35dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="50dp" />
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="SET WORK"
                 android:textColor="@color/assistantCard"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintHorizontal_bias="0.242"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/view3"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="33dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
@@ -114,7 +125,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/renameLocationCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="160dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -146,13 +157,31 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                android:id="@+id/view2"
+                android:layout_marginTop="22dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                android:layout_marginTop="38dp"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                android:id="@+id/view3" />
+
 
             <EditText
                 android:id="@+id/renamehometext"
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_width="121dp"
                 android:layout_height="54dp"
-                android:layout_marginLeft="62dp"
                 android:ems="6"
                 android:hint="RENAME HOME"
                 android:textColorHint="@color/greyText"
@@ -162,17 +191,16 @@
                 android:fontFamily="sans-serif-condensed"
                 android:inputType="text"
                 android:selectAllOnFocus="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.401" />
+                android:layout_marginTop="38dp"
+                app:layout_constraintRight_toLeftOf="@+id/view2"
+                android:layout_marginRight="35dp" />
 
             <EditText
                 android:id="@+id/renameworktext"
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_width="121dp"
                 android:layout_height="54dp"
-                android:layout_marginLeft="62dp"
                 android:ems="6"
                 android:hint="RENAME WORK"
                 android:textColorHint="@color/greyText"
@@ -182,43 +210,40 @@
                 android:fontFamily="sans-serif-condensed"
                 android:inputType="text"
                 android:selectAllOnFocus="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.849" />
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/renamehometext"
+                app:layout_constraintRight_toLeftOf="@+id/view3"
+                android:layout_marginRight="35dp" />
 
             <Button
                 android:id="@+id/renamehomebutton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="43dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="CHANGE"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="98dp"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:layout_marginTop="38dp"
+                app:layout_constraintLeft_toRightOf="@+id/view2"
+                android:layout_marginLeft="31dp" />
 
             <Button
                 android:id="@+id/renameworkbutton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="98dp"
-                android:layout_marginTop="0dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="CHANGE"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/renamehomebutton"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintLeft_toRightOf="@+id/view3"
+                android:layout_marginLeft="31dp" />
 
 
 
@@ -227,7 +252,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/aboutCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -287,7 +312,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="95dp"
                 app:layout_constraintRight_toLeftOf="@+id/textView7"
-                android:layout_marginRight="8dp" />
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -302,7 +329,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="142dp"
                 app:layout_constraintRight_toLeftOf="@+id/textView8"
-                android:layout_marginRight="8dp" />
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -319,7 +348,8 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginRight="31dp"
                 app:layout_constraintRight_toRightOf="parent"
-                android:id="@+id/textView7" />
+                android:id="@+id/textView7"
+                android:layout_marginEnd="31dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -336,7 +366,8 @@
                 android:layout_marginTop="147dp"
                 android:layout_marginRight="31dp"
                 app:layout_constraintRight_toRightOf="parent"
-                android:id="@+id/textView8" />
+                android:id="@+id/textView8"
+                android:layout_marginEnd="31dp" />
 
 
         </android.support.constraint.ConstraintLayout>
