@@ -453,6 +453,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:stateListAnimator="@null"
                 android:textColor="@color/clickabletext"
+                android:checked="true"
                 android:textOff="WORK"
                 android:textOn="WORK"
                 android:textSize="24sp"
@@ -484,7 +485,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            54
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

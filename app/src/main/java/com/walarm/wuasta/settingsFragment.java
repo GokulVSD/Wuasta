@@ -35,6 +35,12 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
         Button workPicker = (Button)v.findViewById(R.id.changeworklocationbutton);
         workPicker.setOnClickListener(this);
 
+        Button renameHome = (Button)v.findViewById(R.id.renamehomebutton);
+        renameHome.setOnClickListener(this);
+
+        Button renameWork = (Button)v.findViewById(R.id.renameworkbutton);
+        renameWork.setOnClickListener(this);
+
         return v;
     }
 
@@ -66,6 +72,14 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.renamehomebutton:
+                Toast.makeText(getActivity(), "Home rename",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.renameworkbutton:
+                Toast.makeText(getActivity(), "Work rename",
+                        Toast.LENGTH_SHORT).show();
                 break;
         }
     }
