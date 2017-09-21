@@ -48,18 +48,18 @@
                 android:id="@+id/timePicker"
                 android:layout_width="630dp"
                 android:layout_height="350dp"
-                android:scaleY="0.7"
-                android:scaleX="0.7"
+                android:scaleY="0.75"
+                android:scaleX="0.75"
                 android:numbersTextColor="@color/assistantCard"
                 android:numbersBackgroundColor="@color/colorPrimary"
-                android:numbersSelectorColor="@color/colorPrimaryDark"
+                android:numbersSelectorColor="@color/timepicker"
                 android:headerBackground="@color/timepicker"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintVertical_bias="0.18" />
 
 
         </android.support.constraint.ConstraintLayout>
