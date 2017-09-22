@@ -10,7 +10,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/timePickerCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="290dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -42,7 +42,8 @@
                 android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginEnd="286dp" />
 
             <TextView
                 android:id="@+id/timetobeattext"
@@ -82,7 +83,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/repeatCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="90dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -115,7 +116,7 @@
 
             <ToggleButton
                 android:id="@+id/suntoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/colorPrimary"
@@ -134,7 +135,7 @@
 
             <ToggleButton
                 android:id="@+id/montoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
                 android:layout_marginStart="24dp"
@@ -157,9 +158,8 @@
 
             <ToggleButton
                 android:id="@+id/tuetoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
                 android:layout_marginTop="37dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
@@ -175,7 +175,7 @@
 
             <ToggleButton
                 android:id="@+id/wedtoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
                 android:backgroundTint="@color/colorPrimary"
@@ -194,7 +194,7 @@
 
             <ToggleButton
                 android:id="@+id/thutoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
                 android:backgroundTint="@color/colorPrimary"
@@ -211,7 +211,7 @@
 
             <ToggleButton
                 android:id="@+id/fritoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
                 android:backgroundTint="@color/colorPrimary"
@@ -228,7 +228,7 @@
 
             <ToggleButton
                 android:id="@+id/sattoggle"
-                android:layout_width="54dp"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
                 android:backgroundTint="@color/colorPrimary"
@@ -249,7 +249,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/delayCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="130dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -312,7 +312,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="74dp"
                 app:layout_constraintRight_toLeftOf="@+id/tenone"
-                android:layout_marginRight="1dp" />
+                android:layout_marginRight="1dp"
+                android:layout_marginEnd="1dp" />
 
             <ToggleButton
                 android:id="@+id/tenone"
@@ -329,8 +330,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintRight_toLeftOf="@+id/view"
-                android:layout_marginRight="-7dp" />
+                app:layout_constraintRight_toLeftOf="@+id/view" />
 
             <TextView
                 android:layout_width="2dp"
@@ -359,7 +359,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintLeft_toRightOf="@+id/view"
-                android:layout_marginLeft="1dp" />
+                android:layout_marginLeft="1dp"
+                android:layout_marginStart="1dp" />
 
             <ToggleButton
                 android:id="@+id/thirtyone"
@@ -377,14 +378,17 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@+id/fifteenone"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="1dp" />
 
             <android.support.constraint.Guideline
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/guideline"
                 app:layout_constraintGuide_begin="20dp"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                tools:layout_editor_absoluteY="341dp"
+                tools:layout_editor_absoluteX="20dp" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -392,7 +396,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/weatherSetCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="100dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -440,7 +444,9 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/weatherwork"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="8dp" />
 
 
             <ToggleButton
@@ -468,7 +474,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="-6dp"
                 android:layout_marginTop="45dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:backgroundTintMode="src_in"
@@ -482,7 +487,8 @@
                 app:layout_constraintHorizontal_bias="0.16"
                 app:layout_constraintLeft_toRightOf="@+id/weatherwork"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp" />
 
 
 
