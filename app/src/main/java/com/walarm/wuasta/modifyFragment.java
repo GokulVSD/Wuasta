@@ -28,6 +28,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
     public View v;
     Toast toast;
     int daycounter;
+    int totaldelay;
 
     @Nullable
     @Override
@@ -37,27 +38,6 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
 
         Button timeset = (Button)v.findViewById(R.id.timesetbutton);
         timeset.setOnClickListener(this);
-
-        ToggleButton plusfive = (ToggleButton)v.findViewById(R.id.fiveone);
-        plusfive.setOnCheckedChangeListener(this);
-
-        ToggleButton plusten = (ToggleButton)v.findViewById(R.id.tenone);
-        plusten.setOnCheckedChangeListener(this);
-
-        ToggleButton plusfifteen = (ToggleButton)v.findViewById(R.id.fifteenone);
-        plusfifteen.setOnCheckedChangeListener(this);
-
-        ToggleButton plusthirty = (ToggleButton)v.findViewById(R.id.thirtyone);
-        plusthirty.setOnCheckedChangeListener(this);
-
-        ToggleButton weatherhome = (ToggleButton)v.findViewById(R.id.weatherhome);
-        weatherhome.setOnCheckedChangeListener(this);
-
-        ToggleButton weatherwork = (ToggleButton)v.findViewById(R.id.weatherwork);
-        weatherwork.setOnCheckedChangeListener(this);
-
-        ToggleButton weatherenroute = (ToggleButton)v.findViewById(R.id.weatherenroute);
-        weatherenroute.setOnCheckedChangeListener(this);
 
         return v;
     }
@@ -71,6 +51,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
 
         ((TimePicker)view.findViewById(R.id.timePicker)).setHour(sharedPref.getInt("sethour",9));
         ((TimePicker)view.findViewById(R.id.timePicker)).setMinute(sharedPref.getInt("setminute",0));
+
 
         ToggleButton sun = (ToggleButton)view.findViewById(R.id.suntoggle);
         sun.setChecked(sharedPref.getBoolean("sun",false));
@@ -106,6 +87,90 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         sat.setChecked(sharedPref.getBoolean("sat",false));
         if(sat.isChecked()) daycounter++;
         sat.setOnCheckedChangeListener(this);
+
+
+        totaldelay = sharedPref.getInt("delay",0);
+
+        ToggleButton plusfive = (ToggleButton)view.findViewById(R.id.fiveone);
+        ToggleButton plusten = (ToggleButton)view.findViewById(R.id.tenone);
+        ToggleButton plusfifteen = (ToggleButton)view.findViewById(R.id.fifteenone);
+        ToggleButton plusthirty = (ToggleButton)view.findViewById(R.id.thirtyone);
+
+        switch (sharedPref.getInt("delay",0)){
+            case 0:
+                break;
+            case 5:
+                plusfive.setChecked(true);
+                break;
+            case 10:
+                plusten.setChecked(true);
+                break;
+            case 15:
+                plusfifteen.setChecked(true);
+                break;
+            case 20:
+                plusfive.setChecked(true);
+                plusfifteen.setChecked(true);
+                break;
+            case 25:
+                plusten.setChecked(true);
+                plusfifteen.setChecked(true);
+                break;
+            case 30:
+                plusthirty.setChecked(true);
+                break;
+            case 35:
+                plusfive.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+            case 40:
+                plusten.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+            case 45:
+                plusfifteen.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+            case 50:
+                plusfive.setChecked(true);
+                plusfifteen.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+            case 55:
+                plusten.setChecked(true);
+                plusfifteen.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+            case 60:
+                plusfive.setChecked(true);
+                plusten.setChecked(true);
+                plusfifteen.setChecked(true);
+                plusthirty.setChecked(true);
+                break;
+        }
+        plusfive.setOnCheckedChangeListener(this);
+        plusten.setOnCheckedChangeListener(this);
+        plusfifteen.setOnCheckedChangeListener(this);
+        plusthirty.setOnCheckedChangeListener(this);
+
+
+        ToggleButton weatherhome = (ToggleButton)v.findViewById(R.id.weatherhome);
+        weatherhome.setOnCheckedChangeListener(this);
+
+        ToggleButton weatherwork = (ToggleButton)v.findViewById(R.id.weatherwork);
+        weatherwork.setOnCheckedChangeListener(this);
+
+        ToggleButton weatherenroute = (ToggleButton)v.findViewById(R.id.weatherenroute);
+        weatherenroute.setOnCheckedChangeListener(this);
+
+        String weatherloc = sharedPref.getString("weatherloc","work");
+
+        if(weatherloc.equals("work"))
+            weatherwork.setChecked(true);
+        else if (weatherloc.equals("home"))
+            weatherhome.setChecked(true);
+        else
+            weatherenroute.setChecked(true);
     }
 
     @Override
@@ -215,39 +280,39 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
             }
                 break;
             case R.id.fiveone: if(isChecked){
-                Toast.makeText(getActivity(), "5 Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay+=5;
+                edit.putInt("delay",totaldelay);
             }
             else{
-                Toast.makeText(getActivity(), "5 Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay-=5;
+                edit.putInt("delay",totaldelay);
             }
                 break;
             case R.id.tenone: if(isChecked){
-                Toast.makeText(getActivity(), "10 Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay+=10;
+                edit.putInt("delay",totaldelay);
             }
             else{
-                Toast.makeText(getActivity(), "10 Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay-=10;
+                edit.putInt("delay",totaldelay);
             }
                 break;
             case R.id.fifteenone: if(isChecked){
-                Toast.makeText(getActivity(), "15 Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay+=15;
+                edit.putInt("delay",totaldelay);
             }
             else{
-                Toast.makeText(getActivity(), "15 Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay-=15;
+                edit.putInt("delay",totaldelay);
             }
                 break;
             case R.id.thirtyone: if(isChecked){
-                Toast.makeText(getActivity(), "30 Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay+=30;
+                edit.putInt("delay",totaldelay);
             }
             else{
-                Toast.makeText(getActivity(), "30 Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                totaldelay-=30;
+                edit.putInt("delay",totaldelay);
             }
                 break;
             case R.id.weatherhome: if(isChecked){
@@ -259,8 +324,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(this);
 
-                Toast.makeText(getActivity(), "Weather Home Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putString("weatherloc","home");
             }
             else{
                 buttonView.setChecked(true);
@@ -275,8 +339,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(this);
 
-                Toast.makeText(getActivity(), "Weather Work Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putString("weatherloc","work");
             }
             else{
                 buttonView.setChecked(true);
@@ -291,8 +354,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(this);
 
-                Toast.makeText(getActivity(), "Weather Enroute Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putString("weatherloc","enroute");
             }
             else{
                 buttonView.setChecked(true);
