@@ -102,10 +102,10 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
                     break;
                 }
 
-                edit.putString("workname",workedit.getText().toString());
+                edit.putString("workname",workedit.getText().toString().trim());
 
                 if(toast != null) toast.cancel();
-                toast = Toast.makeText(getActivity(), "Work Renamed: "+workedit.getText().toString(), Toast.LENGTH_SHORT);
+                toast = Toast.makeText(getActivity(), "Work Renamed: "+workedit.getText().toString().trim(), Toast.LENGTH_SHORT);
                 toast.show();
 
                 break;

@@ -52,6 +52,9 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         ((TimePicker)view.findViewById(R.id.timePicker)).setHour(sharedPref.getInt("sethour",9));
         ((TimePicker)view.findViewById(R.id.timePicker)).setMinute(sharedPref.getInt("setminute",0));
 
+        TextView timetobeat = (TextView)view.findViewById(R.id.timetobeattext);
+        timetobeat.setText("TIME TO BE AT "+sharedPref.getString("workname","WORK").toUpperCase());
+
 
         ToggleButton sun = (ToggleButton)view.findViewById(R.id.suntoggle);
         sun.setChecked(sharedPref.getBoolean("sun",false));
@@ -158,16 +161,18 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         weatherhome.setOnCheckedChangeListener(this);
 
         ToggleButton weatherwork = (ToggleButton)v.findViewById(R.id.weatherwork);
+        weatherwork.setTextOn(sharedPref.getString("workname","WORK").toUpperCase());
+        weatherwork.setTextOff(sharedPref.getString("workname","WORK").toUpperCase());
         weatherwork.setOnCheckedChangeListener(this);
 
         ToggleButton weatherenroute = (ToggleButton)v.findViewById(R.id.weatherenroute);
         weatherenroute.setOnCheckedChangeListener(this);
 
-        String weatherloc = sharedPref.getString("weatherloc","work");
+        String weatherloc = sharedPref.getString("weatherloc","Work");
 
-        if(weatherloc.equals("work"))
+        if(weatherloc.equals("Work"))
             weatherwork.setChecked(true);
-        else if (weatherloc.equals("home"))
+        else if (weatherloc.equals("Home"))
             weatherhome.setChecked(true);
         else
             weatherenroute.setChecked(true);
@@ -324,7 +329,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(this);
 
-                edit.putString("weatherloc","home");
+                edit.putString("weatherloc","Home");
             }
             else{
                 buttonView.setChecked(true);
@@ -339,7 +344,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(this);
 
-                edit.putString("weatherloc","work");
+                edit.putString("weatherloc","Work");
             }
             else{
                 buttonView.setChecked(true);
@@ -354,7 +359,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(this);
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(this);
 
-                edit.putString("weatherloc","enroute");
+                edit.putString("weatherloc","Enroute");
             }
             else{
                 buttonView.setChecked(true);
