@@ -1,8 +1,10 @@
 package com.walarm.wuasta;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -167,9 +169,15 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        //Call Google Maps Navigation Intent
-        Toast.makeText(getActivity(), "Navigation Intent",
-                Toast.LENGTH_SHORT).show();
+        SharedPreferences sp = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+
+        String url = "http://maps.google.com/maps?saddr="+sp.getString("newhomelat","12.8614515")+","
+                +sp.getString("newhomelong","77.6647081")+"&daddr="+sp.getString("newworklat","12.975686000000001")
+                +","+sp.getString("newworklong","77.605852");
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse(url));
+        startActivity(intent);
 
     }
 }
