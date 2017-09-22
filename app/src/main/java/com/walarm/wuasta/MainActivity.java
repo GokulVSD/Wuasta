@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,8 +36,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    int backcounter=1;
+    Toast toast;
     @Override
     public void onBackPressed(){
+        if(backcounter==1){
+            if(toast != null) toast.cancel();
+            toast = Toast.makeText(this, "Press Again to Exit", Toast.LENGTH_SHORT);
+            toast.show();
+            backcounter++;
+            return;
+        }
+        backcounter=1;
+        super.onBackPressed();
     }
 
 

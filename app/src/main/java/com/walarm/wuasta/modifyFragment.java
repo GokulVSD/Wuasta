@@ -11,8 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.sql.Time;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by gokul on 18-09-2017.
@@ -21,6 +26,8 @@ import android.widget.ToggleButton;
 public class modifyFragment extends Fragment implements CompoundButton.OnCheckedChangeListener,View.OnClickListener{
 
     public View v;
+    Toast toast;
+    int daycounter;
 
     @Nullable
     @Override
@@ -30,27 +37,6 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
 
         Button timeset = (Button)v.findViewById(R.id.timesetbutton);
         timeset.setOnClickListener(this);
-
-        ToggleButton sun = (ToggleButton)v.findViewById(R.id.suntoggle);
-        sun.setOnCheckedChangeListener(this);
-
-        ToggleButton mon = (ToggleButton)v.findViewById(R.id.montoggle);
-        mon.setOnCheckedChangeListener(this);
-
-        ToggleButton tue = (ToggleButton)v.findViewById(R.id.tuetoggle);
-        tue.setOnCheckedChangeListener(this);
-
-        ToggleButton wed = (ToggleButton)v.findViewById(R.id.wedtoggle);
-        wed.setOnCheckedChangeListener(this);
-
-        ToggleButton thu = (ToggleButton)v.findViewById(R.id.thutoggle);
-        thu.setOnCheckedChangeListener(this);
-
-        ToggleButton fri = (ToggleButton)v.findViewById(R.id.fritoggle);
-        fri.setOnCheckedChangeListener(this);
-
-        ToggleButton sat = (ToggleButton)v.findViewById(R.id.sattoggle);
-        sat.setOnCheckedChangeListener(this);
 
         ToggleButton plusfive = (ToggleButton)v.findViewById(R.id.fiveone);
         plusfive.setOnCheckedChangeListener(this);
@@ -79,74 +65,153 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+        daycounter=0;
+
+        ((TimePicker)view.findViewById(R.id.timePicker)).setHour(sharedPref.getInt("sethour",9));
+        ((TimePicker)view.findViewById(R.id.timePicker)).setMinute(sharedPref.getInt("setminute",0));
+
+        ToggleButton sun = (ToggleButton)view.findViewById(R.id.suntoggle);
+        sun.setChecked(sharedPref.getBoolean("sun",false));
+        if(sun.isChecked()) daycounter++;
+        sun.setOnCheckedChangeListener(this);
+
+        ToggleButton mon = (ToggleButton)view.findViewById(R.id.montoggle);
+        mon.setChecked(sharedPref.getBoolean("mon",true));
+        if(mon.isChecked()) daycounter++;
+        mon.setOnCheckedChangeListener(this);
+
+        ToggleButton tue = (ToggleButton)view.findViewById(R.id.tuetoggle);
+        tue.setChecked(sharedPref.getBoolean("tue",true));
+        if(tue.isChecked()) daycounter++;
+        tue.setOnCheckedChangeListener(this);
+
+        ToggleButton wed = (ToggleButton)view.findViewById(R.id.wedtoggle);
+        wed.setChecked(sharedPref.getBoolean("wed",true));
+        if(wed.isChecked()) daycounter++;
+        wed.setOnCheckedChangeListener(this);
+
+        ToggleButton thu = (ToggleButton)view.findViewById(R.id.thutoggle);
+        thu.setChecked(sharedPref.getBoolean("thu",true));
+        if(thu.isChecked()) daycounter++;
+        thu.setOnCheckedChangeListener(this);
+
+        ToggleButton fri = (ToggleButton)view.findViewById(R.id.fritoggle);
+        fri.setChecked(sharedPref.getBoolean("fri",true));
+        if(fri.isChecked()) daycounter++;
+        fri.setOnCheckedChangeListener(this);
+
+        ToggleButton sat = (ToggleButton)view.findViewById(R.id.sattoggle);
+        sat.setChecked(sharedPref.getBoolean("sat",false));
+        if(sat.isChecked()) daycounter++;
+        sat.setOnCheckedChangeListener(this);
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+
         switch (buttonView.getId()){
 
             case R.id.suntoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Sunday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("sun",true);
+                daycounter++;
             }
                 else{
-                Toast.makeText(getActivity(), "Sunday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("sun",false);
+                }
             }
             break;
             case R.id.montoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Monday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("mon",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Monday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("mon",false);
+                }
             }
             break;
             case R.id.tuetoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Tuesday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("tue",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Tuesday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("tue",false);
+                }
             }
                 break;
             case R.id.wedtoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Wednesday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("wed",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Wednesday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("wed",false);
+                }
             }
                 break;
             case R.id.thutoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Thursday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("thu",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Thursday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("thu",false);
+                }
             }
                 break;
             case R.id.fritoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Friday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("fri",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Friday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("fri",false);
+                }
             }
                 break;
             case R.id.sattoggle: if(isChecked){
-                Toast.makeText(getActivity(), "Saturday Toggled ON",
-                        Toast.LENGTH_SHORT).show();
+                edit.putBoolean("sat",true);
+                daycounter++;
             }
             else{
-                Toast.makeText(getActivity(), "Saturday Toggled OFF",
-                        Toast.LENGTH_SHORT).show();
+                if(daycounter==1){
+                    buttonView.setChecked(true);
+                }
+                else{
+                    daycounter--;
+                    edit.putBoolean("sat",false);
+                }
             }
                 break;
             case R.id.fiveone: if(isChecked){
@@ -234,15 +299,24 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
             }
                 break;
         }
+        edit.commit();
 
     }
 
     @Override
     public void onClick(View view) {
-        //set time
-        Toast.makeText(getActivity(), "Set Time",
-                Toast.LENGTH_SHORT).show();
 
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
 
+        TimePicker timePicker = (TimePicker)v.findViewById(R.id.timePicker);
+        edit.putInt("sethour",timePicker.getHour());
+        edit.putInt("setminute",timePicker.getMinute());
+
+        if(toast != null) toast.cancel();
+        toast = Toast.makeText(getActivity(), "Time Set", Toast.LENGTH_SHORT);
+        toast.show();
+
+        edit.commit();
     }
 }
