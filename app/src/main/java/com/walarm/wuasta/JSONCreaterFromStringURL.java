@@ -41,7 +41,7 @@ public class JSONCreaterFromStringURL {
                 .getJSONObject(0)
                 .getJSONArray("legs")
                 .getJSONObject(0)
-                .getJSONObject("duration");
+                .getJSONObject("duration_in_traffic");
 //                .getJSONObject(0);
 
         return (int)Math.ceil((json.getInt("value")/60.0));

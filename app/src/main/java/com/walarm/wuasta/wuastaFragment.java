@@ -28,16 +28,32 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     final int timezoneHourOffset = -5;
     final int timezoneMinuteOffset = -30;
+    int remake=0;
     Integer duration;
+    public View v;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.wuastalayout, container, false);
+        v = inflater.inflate(R.layout.wuastalayout, container, false);
+
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+        SharedPreferences.Editor edit2 = sharedPref.edit();
 
         CardView directions = (CardView) v.findViewById(R.id.navigationCard);
         directions.setOnClickListener(this);
+
+        if(sharedPref.getBoolean("recheck",true)) {
+            if (remake != 1) {
+                onViewCreated(v, savedInstanceState);
+                edit2.putBoolean("recheck", true);
+                remake++;
+            }
+            remake = 0;
+        }
+        edit2.commit();
+
         return v;
     }
 
@@ -187,11 +203,13 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         long currentepoch = System.currentTimeMillis()/1000L;
         long currentepochdate = currentepoch - currentepoch%86400L;
 
-        long arrivalepoch = currentepochdate + (sharedPref.getInt("sethour",9) + timezoneHourOffset)*60*60
+        long departureepoch = currentepochdate + (sharedPref.getInt("sethour",9) + timezoneHourOffset)*60*60
                 + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
                 + dayfactor*86400;
 
-        edit.putLong("arrivaltime",arrivalepoch);
+        departureepoch = departureepoch - 60*60L;
+
+        edit.putLong("departuretime",departureepoch);
 
 
 
@@ -201,7 +219,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         else
             duration = new Integer(sharedPref.getString("duration","0"));
 
-        if(sharedPref.getBoolean("recheck",false) || duration == null){
+        if(sharedPref.getBoolean("recheck",true) || duration == null){
 
             edit.putBoolean("recheck",false);
 
@@ -211,9 +229,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
                     "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
                     "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
-                    "&arrival_time="+ sharedPref.getLong("arrivaltime",3000000000L) +
+                    "&departure_time="+ sharedPref.getLong("departuretime",3000000000L) +
                     "&mode=driving" +
-                    "&key=");
+                    "&key=ADD_KEY_HERE");
 
             link = uri.toURL();
         } catch (Exception e) {
@@ -224,9 +242,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             @Override
             protected void onPostExecute(Integer integer) {
-                if(integer == null) Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-                else Toast.makeText(getActivity(), "Duration:"+integer.toString(), Toast.LENGTH_SHORT).show();
-
+                if(integer == null){
+                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
                 setDuration(integer);
 
                 super.onPostExecute(integer);
@@ -243,11 +261,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         }.execute(link);
 
     }
-
-
-
-
-        edit.commit();
+    edit.commit();
+        setTextView();
     }
 
     @Override
@@ -267,12 +282,59 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     public void setDuration(Integer sd){
 
-        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPref.edit();
+        SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+        SharedPreferences.Editor edit1 = sharedPref1.edit();
+
+        if(sd == null){
+            duration = null;
+            edit1.putString("duration",null);
+            return;
+        }
+
+        int fd = sd.intValue();
+
+        int hr = sharedPref1.getInt("sethour",9);
+        int mn = sharedPref1.getInt("setminute",0);
+
+        int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
+
+        hr = settimeepoch >= 60 ? settimeepoch/60 : 0;
+        mn = settimeepoch%60;
+
+        edit1.putInt("phour",hr);
+        edit1.putInt("pminute",mn);
+
+        TextView suggtime = (TextView)v.findViewById(R.id.predictedTimeText);
+        if (hr > 12) {
+            suggtime.setText((hr - 12) + ":" + (mn > 9 ? "" : "0") + mn + " PM");
+        } else if (hr == 12) {
+            suggtime.setText(hr + ":" + (mn > 9 ? "" : "0") + mn + " PM");
+        } else {
+            suggtime.setText((hr == 0 ? 12 : hr) + ":" + (mn > 9 ? "" : "0") + mn + " AM");
+        }
 
         duration = sd;
 
-        edit.putString("duration",sd==null?null:sd.toString());
-        edit.commit();
+        edit1.putString("duration",sd.toString());
+        edit1.commit();
+    }
+
+    void setTextView(){
+
+        SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+
+        int hr = sharedPref1.getInt("phour",0);
+        int mn = sharedPref1.getInt("pminute",0);
+
+        TextView suggtime = (TextView)v.findViewById(R.id.predictedTimeText);
+
+        if (hr > 12) {
+            suggtime.setText((hr - 12) + ":" + (mn > 9 ? "" : "0") + mn + " PM");
+        } else if (hr == 12) {
+            suggtime.setText(hr + ":" + (mn > 9 ? "" : "0") + mn + " PM");
+        } else {
+            suggtime.setText((hr == 0 ? 12 : hr) + ":" + (mn > 9 ? "" : "0") + mn + " AM");
+        }
+
     }
 }

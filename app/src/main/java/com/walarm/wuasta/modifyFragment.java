@@ -301,37 +301,45 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
             case R.id.fiveone: if(isChecked){
                 totaldelay+=5;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
             else{
                 totaldelay-=5;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
                 break;
             case R.id.tenone: if(isChecked){
                 totaldelay+=10;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
             else{
                 totaldelay-=10;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
                 break;
             case R.id.fifteenone: if(isChecked){
                 totaldelay+=15;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
             else{
                 totaldelay-=15;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
                 break;
             case R.id.thirtyone: if(isChecked){
                 totaldelay+=30;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
             else{
                 totaldelay-=30;
                 edit.putInt("delay",totaldelay);
+                edit.putBoolean("recheck",true);
             }
                 break;
             case R.id.weatherhome: if(isChecked){

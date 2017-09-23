@@ -20,7 +20,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value=""/>
+            android:value="ADD_KEY_HERE"/>
 
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
