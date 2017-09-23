@@ -1,10 +1,10 @@
 package com.walarm.wuasta;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URI;
+import java.net.URL;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -22,6 +25,8 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class wuastaFragment extends Fragment implements View.OnClickListener {
+
+    Integer duration;
 
     @Nullable
     @Override
@@ -38,28 +43,28 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
 
 
-        TextView today = (TextView)view.findViewById(R.id.wuastaDay);
-        TextView time = (TextView)view.findViewById(R.id.timeText);
+        TextView today = (TextView) view.findViewById(R.id.wuastaDay);
+        TextView time = (TextView) view.findViewById(R.id.timeText);
 
-        boolean repeatsun = sharedPref.getBoolean("sun",false);
-        boolean repeatmon = sharedPref.getBoolean("mon",true);
-        boolean repeattue = sharedPref.getBoolean("tue",true);
-        boolean repeatwed = sharedPref.getBoolean("wed",true);
-        boolean repeatthu = sharedPref.getBoolean("thu",true);
-        boolean repeatfri = sharedPref.getBoolean("fri",true);
-        boolean repeatsat = sharedPref.getBoolean("sat",false);
+        boolean repeatsun = sharedPref.getBoolean("sun", false);
+        boolean repeatmon = sharedPref.getBoolean("mon", true);
+        boolean repeattue = sharedPref.getBoolean("tue", true);
+        boolean repeatwed = sharedPref.getBoolean("wed", true);
+        boolean repeatthu = sharedPref.getBoolean("thu", true);
+        boolean repeatfri = sharedPref.getBoolean("fri", true);
+        boolean repeatsat = sharedPref.getBoolean("sat", false);
 
-        int hour = sharedPref.getInt("sethour",9);
-        int min = sharedPref.getInt("setminute",0);
+        int hour = sharedPref.getInt("sethour", 9);
+        int min = sharedPref.getInt("setminute", 0);
 
-        if(hour>12){
-            time.setText((hour-12)+":"+(min>9?"":"0")+min+" PM");
-        }
-        else{
-            time.setText((hour==0?12:hour)+":"+(min>9?"":"0")+min+" AM");
+        if (hour > 12) {
+            time.setText((hour - 12) + ":" + (min > 9 ? "" : "0") + min + " PM");
+        } else {
+            time.setText((hour == 0 ? 12 : hour) + ":" + (min > 9 ? "" : "0") + min + " AM");
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -69,101 +74,161 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         boolean timecondition;
         if (currenthour < hour) timecondition = true;
-        else if(currenthour == hour && currentmin <= min) timecondition = true;
+        else if (currenthour == hour && currentmin <= min) timecondition = true;
         else timecondition = false;
 
         switch (day) {
             case Calendar.SUNDAY:
 
-                if(repeatsun && timecondition) today.setText("Today");
-                else if(repeatmon) today.setText("Tomorrow");
-                else if(repeattue) today.setText("Tuesday");
-                else if(repeatwed) today.setText("Wednesday");
-                else if(repeatthu) today.setText("Thursday");
-                else if(repeatfri) today.setText("Friday");
-                else today.setText("Saturday");
+                if (repeatsun && timecondition) today.setText("Today");
+                else if (repeatmon) today.setText("Tomorrow");
+                else if (repeattue) today.setText("Tuesday");
+                else if (repeatwed) today.setText("Wednesday");
+                else if (repeatthu) today.setText("Thursday");
+                else if (repeatfri) today.setText("Friday");
+                else if (repeatsat) today.setText("Saturday");
+                else today.setText("Sunday");
                 break;
 
             case Calendar.MONDAY:
 
-                if(repeatmon && timecondition) today.setText("Today");
-                else if(repeattue) today.setText("Tomorrow");
-                else if(repeatwed) today.setText("Wednesday");
-                else if(repeatthu) today.setText("Thursday");
-                else if(repeatfri) today.setText("Friday");
-                else if(repeatsat) today.setText("Saturday");
-                else today.setText("Sunday");
+                if (repeatmon && timecondition) today.setText("Today");
+                else if (repeattue) today.setText("Tomorrow");
+                else if (repeatwed) today.setText("Wednesday");
+                else if (repeatthu) today.setText("Thursday");
+                else if (repeatfri) today.setText("Friday");
+                else if (repeatsat) today.setText("Saturday");
+                else if (repeatsun) today.setText("Sunday");
+                else today.setText("Monday");
                 break;
 
             case Calendar.TUESDAY:
 
-                if(repeattue && timecondition) today.setText("Today");
-                else if(repeatwed) today.setText("Tomorrow");
-                else if(repeatthu) today.setText("Thursday");
-                else if(repeatfri) today.setText("Friday");
-                else if(repeatsat) today.setText("Saturday");
-                else if(repeatsun) today.setText("Sunday");
-                else today.setText("Monday");
+                if (repeattue && timecondition) today.setText("Today");
+                else if (repeatwed) today.setText("Tomorrow");
+                else if (repeatthu) today.setText("Thursday");
+                else if (repeatfri) today.setText("Friday");
+                else if (repeatsat) today.setText("Saturday");
+                else if (repeatsun) today.setText("Sunday");
+                else if (repeatmon) today.setText("Monday");
+                else today.setText("Tuesday");
                 break;
 
             case Calendar.WEDNESDAY:
 
-                if(repeatwed && timecondition) today.setText("Today");
-                else if(repeatthu) today.setText("Tomorrow");
-                else if(repeatfri) today.setText("Friday");
-                else if(repeatsat) today.setText("Saturday");
-                else if(repeatsun) today.setText("Sunday");
-                else if(repeatmon) today.setText("Monday");
-                else today.setText("Tuesday");
+                if (repeatwed && timecondition) today.setText("Today");
+                else if (repeatthu) today.setText("Tomorrow");
+                else if (repeatfri) today.setText("Friday");
+                else if (repeatsat) today.setText("Saturday");
+                else if (repeatsun) today.setText("Sunday");
+                else if (repeatmon) today.setText("Monday");
+                else if (repeattue) today.setText("Tuesday");
+                else today.setText("Wednesday");
                 break;
 
             case Calendar.THURSDAY:
 
-                if(repeatthu && timecondition) today.setText("Today");
-                else if(repeatfri) today.setText("Tomorrow");
-                else if(repeatsat) today.setText("Saturday");
-                else if(repeatsun) today.setText("Sunday");
-                else if(repeatmon) today.setText("Monday");
-                else if(repeattue) today.setText("Tuesday");
-                else today.setText("Wednesday");
+                if (repeatthu && timecondition) today.setText("Today");
+                else if (repeatfri) today.setText("Tomorrow");
+                else if (repeatsat) today.setText("Saturday");
+                else if (repeatsun) today.setText("Sunday");
+                else if (repeatmon) today.setText("Monday");
+                else if (repeattue) today.setText("Tuesday");
+                else if (repeatwed) today.setText("Wednesday");
+                else today.setText("Thursday");
                 break;
 
             case Calendar.FRIDAY:
 
-                if(repeatfri && timecondition) today.setText("Today");
-                else if(repeatsat) today.setText("Tomorrow");
-                else if(repeatsun) today.setText("Sunday");
-                else if(repeatmon) today.setText("Monday");
-                else if(repeattue) today.setText("Tuesday");
-                else if(repeatwed) today.setText("Wednesday");
-                else today.setText("Thursday");
+                if (repeatfri && timecondition) today.setText("Today");
+                else if (repeatsat) today.setText("Tomorrow");
+                else if (repeatsun) today.setText("Sunday");
+                else if (repeatmon) today.setText("Monday");
+                else if (repeattue) today.setText("Tuesday");
+                else if (repeatwed) today.setText("Wednesday");
+                else if (repeatthu) today.setText("Thursday");
+                else today.setText("Friday");
                 break;
 
             case Calendar.SATURDAY:
 
-                if(repeatsat && timecondition) today.setText("Today");
-                else if(repeatsun) today.setText("Tomorrow");
-                else if(repeatmon) today.setText("Monday");
-                else if(repeattue) today.setText("Tuesday");
-                else if(repeatwed) today.setText("Wednesday");
-                else if(repeatthu) today.setText("Thursday");
-                else today.setText("Friday");
+                if (repeatsat && timecondition) today.setText("Today");
+                else if (repeatsun) today.setText("Tomorrow");
+                else if (repeatmon) today.setText("Monday");
+                else if (repeattue) today.setText("Tuesday");
+                else if (repeatwed) today.setText("Wednesday");
+                else if (repeatthu) today.setText("Thursday");
+                else if (repeatfri) today.setText("Friday");
+                else today.setText("Saturday");
                 break;
         }
 
-        TextView desttext = (TextView)view.findViewById(R.id.destinationText);
-        desttext.setText(sharedPref.getString("workname","Work"));
+        TextView desttext = (TextView) view.findViewById(R.id.destinationText);
+        desttext.setText(sharedPref.getString("workname", "Work"));
 
-        TextView desttextweather = (TextView)view.findViewById(R.id.destinationTextWeather);
-        desttextweather.setText(sharedPref.getString("weatherloc","Work").equals("Work")?
-                                    sharedPref.getString("workname","Work"):
-                                sharedPref.getString("weatherloc","Work"));
+        TextView desttextweather = (TextView) view.findViewById(R.id.destinationTextWeather);
+        desttextweather.setText(sharedPref.getString("weatherloc", "Work").equals("Work") ?
+                sharedPref.getString("workname", "Work") :
+                sharedPref.getString("weatherloc", "Work"));
 
-        if(sharedPref.getString("weatherloc","Work").equals("Enroute")){
-            CardView weathercard = (CardView)view.findViewById(R.id.weatherCard);
-            TextView weatherAT = (TextView)weathercard.findViewById(R.id.textView3);
+        if (sharedPref.getString("weatherloc", "Work").equals("Enroute")) {
+            CardView weathercard = (CardView) view.findViewById(R.id.weatherCard);
+            TextView weatherAT = (TextView) weathercard.findViewById(R.id.textView3);
             weatherAT.setText("ON");
         }
+
+        if(sharedPref.getString("duration",null) == null)
+            duration = null;
+        else
+            duration = new Integer(sharedPref.getString("duration","0"));
+
+        if(sharedPref.getBoolean("recheck",false) || duration == null){
+
+            edit.putBoolean("recheck",false);
+
+        URI uri;
+        URL link;
+        try {
+            uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
+                    "origin=12.8614515,77.6647081&" +
+                    "destination=12.975686000000001,77.605852&" +
+                    "arrival_time=1506180000&" +
+                    "mode=driving&" +
+                    "key=ADD_YOUR_KEY");
+
+            link = uri.toURL();
+        } catch (Exception e) {
+            link = null;
+        }
+
+        new AsyncTask<URL, Void, Integer>() {
+
+            @Override
+            protected void onPostExecute(Integer integer) {
+                if(integer == null) Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getActivity(), "Duration:"+integer.toString(), Toast.LENGTH_SHORT).show();
+
+                setDuration(integer);
+
+                super.onPostExecute(integer);
+            }
+
+            @Override
+            protected Integer doInBackground(URL... params) {
+                try {
+                    return new Integer(JSONCreaterFromStringURL.getDurationFromURL(params[0]));
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }.execute(link);
+
+    }
+
+
+
+
+        edit.commit();
     }
 
     @Override
@@ -179,5 +244,16 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 Uri.parse(url));
         startActivity(intent);
 
+    }
+
+    public void setDuration(Integer sd){
+
+        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPref.edit();
+
+        duration = sd;
+
+        edit.putString("duration",sd==null?null:sd.toString());
+        edit.commit();
     }
 }

@@ -136,6 +136,7 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
                     edit.putString("homeplace", placeName);
                     edit.putString("newhomelat", ""+latitude);
                     edit.putString("newhomelong", ""+longitude);
+                    edit.putBoolean("recheck",true);
 
                     ((TextView)v.findViewById(R.id.currenthome)).setText(placeName);
 
@@ -153,6 +154,7 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
                     edit.putString("workplace", placeName);
                     edit.putString("newworklat", ""+latitude);
                     edit.putString("newworklong", ""+longitude);
+                    edit.putBoolean("recheck",true);
 
                     ((TextView)v.findViewById(R.id.currentwork)).setText(placeName);
 

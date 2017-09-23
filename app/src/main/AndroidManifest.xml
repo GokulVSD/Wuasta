@@ -23,5 +23,6 @@
             android:value="ADD_YOUR_KEY"/>
 
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

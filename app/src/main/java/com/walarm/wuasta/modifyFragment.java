@@ -188,6 +188,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
 
             case R.id.suntoggle: if(isChecked){
                 edit.putBoolean("sun",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
                 else{
@@ -197,11 +198,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("sun",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
             break;
             case R.id.montoggle: if(isChecked){
                 edit.putBoolean("mon",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -211,11 +214,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("mon",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
             break;
             case R.id.tuetoggle: if(isChecked){
                 edit.putBoolean("tue",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -225,11 +230,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("tue",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
                 break;
             case R.id.wedtoggle: if(isChecked){
                 edit.putBoolean("wed",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -239,11 +246,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("wed",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
                 break;
             case R.id.thutoggle: if(isChecked){
                 edit.putBoolean("thu",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -253,11 +262,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("thu",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
                 break;
             case R.id.fritoggle: if(isChecked){
                 edit.putBoolean("fri",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -267,11 +278,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("fri",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
                 break;
             case R.id.sattoggle: if(isChecked){
                 edit.putBoolean("sat",true);
+                edit.putBoolean("recheck",true);
                 daycounter++;
             }
             else{
@@ -281,6 +294,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 else{
                     daycounter--;
                     edit.putBoolean("sat",false);
+                    edit.putBoolean("recheck",true);
                 }
             }
                 break;
@@ -379,6 +393,7 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         TimePicker timePicker = (TimePicker)v.findViewById(R.id.timePicker);
         edit.putInt("sethour",timePicker.getHour());
         edit.putInt("setminute",timePicker.getMinute());
+        edit.putBoolean("recheck",true);
 
         if(toast != null) toast.cancel();
         toast = Toast.makeText(getActivity(), "Time Set", Toast.LENGTH_SHORT);
