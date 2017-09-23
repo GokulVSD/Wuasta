@@ -26,6 +26,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class wuastaFragment extends Fragment implements View.OnClickListener {
 
+    final int timezoneHourOffset = -5;
+    final int timezoneMinuteOffset = -30;
     Integer duration;
 
     @Nullable
@@ -63,6 +65,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         if (hour > 12) {
             time.setText((hour - 12) + ":" + (min > 9 ? "" : "0") + min + " PM");
+        } else if (hour == 12) {
+            time.setText(hour + ":" + (min > 9 ? "" : "0") + min + " PM");
         } else {
             time.setText((hour == 0 ? 12 : hour) + ":" + (min > 9 ? "" : "0") + min + " AM");
         }
@@ -77,89 +81,91 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         else if (currenthour == hour && currentmin <= min) timecondition = true;
         else timecondition = false;
 
+        int dayfactor=0;
+
         switch (day) {
             case Calendar.SUNDAY:
 
-                if (repeatsun && timecondition) today.setText("Today");
-                else if (repeatmon) today.setText("Tomorrow");
-                else if (repeattue) today.setText("Tuesday");
-                else if (repeatwed) today.setText("Wednesday");
-                else if (repeatthu) today.setText("Thursday");
-                else if (repeatfri) today.setText("Friday");
-                else if (repeatsat) today.setText("Saturday");
-                else today.setText("Sunday");
+                if (repeatsun && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatmon){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeattue){ today.setText("Tuesday"); dayfactor=2;}
+                else if (repeatwed){ today.setText("Wednesday"); dayfactor=3;}
+                else if (repeatthu){ today.setText("Thursday"); dayfactor=4;}
+                else if (repeatfri){ today.setText("Friday"); dayfactor=5;}
+                else if (repeatsat){ today.setText("Saturday"); dayfactor=6;}
+                else{ today.setText("Sunday"); dayfactor=0;}
                 break;
 
             case Calendar.MONDAY:
 
-                if (repeatmon && timecondition) today.setText("Today");
-                else if (repeattue) today.setText("Tomorrow");
-                else if (repeatwed) today.setText("Wednesday");
-                else if (repeatthu) today.setText("Thursday");
-                else if (repeatfri) today.setText("Friday");
-                else if (repeatsat) today.setText("Saturday");
-                else if (repeatsun) today.setText("Sunday");
-                else today.setText("Monday");
+                if (repeatmon && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeattue){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatwed){ today.setText("Wednesday"); dayfactor=2;}
+                else if (repeatthu){ today.setText("Thursday"); dayfactor=3;}
+                else if (repeatfri){ today.setText("Friday"); dayfactor=4;}
+                else if (repeatsat){ today.setText("Saturday"); dayfactor=5;}
+                else if (repeatsun){ today.setText("Sunday"); dayfactor=6;}
+                else{ today.setText("Monday"); dayfactor=7;}
                 break;
 
             case Calendar.TUESDAY:
 
-                if (repeattue && timecondition) today.setText("Today");
-                else if (repeatwed) today.setText("Tomorrow");
-                else if (repeatthu) today.setText("Thursday");
-                else if (repeatfri) today.setText("Friday");
-                else if (repeatsat) today.setText("Saturday");
-                else if (repeatsun) today.setText("Sunday");
-                else if (repeatmon) today.setText("Monday");
-                else today.setText("Tuesday");
+                if (repeattue && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatwed){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatthu){ today.setText("Thursday"); dayfactor=2;}
+                else if (repeatfri){ today.setText("Friday"); dayfactor=3;}
+                else if (repeatsat){ today.setText("Saturday"); dayfactor=4;}
+                else if (repeatsun){ today.setText("Sunday"); dayfactor=5;}
+                else if (repeatmon){ today.setText("Monday"); dayfactor=6;}
+                else{ today.setText("Tuesday"); dayfactor=7;}
                 break;
 
             case Calendar.WEDNESDAY:
 
-                if (repeatwed && timecondition) today.setText("Today");
-                else if (repeatthu) today.setText("Tomorrow");
-                else if (repeatfri) today.setText("Friday");
-                else if (repeatsat) today.setText("Saturday");
-                else if (repeatsun) today.setText("Sunday");
-                else if (repeatmon) today.setText("Monday");
-                else if (repeattue) today.setText("Tuesday");
-                else today.setText("Wednesday");
+                if (repeatwed && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatthu){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatfri){ today.setText("Friday"); dayfactor=2;}
+                else if (repeatsat){ today.setText("Saturday"); dayfactor=3;}
+                else if (repeatsun){ today.setText("Sunday"); dayfactor=4;}
+                else if (repeatmon){ today.setText("Monday"); dayfactor=5;}
+                else if (repeattue){ today.setText("Tuesday"); dayfactor=6;}
+                else{ today.setText("Wednesday"); dayfactor=7;}
                 break;
 
             case Calendar.THURSDAY:
 
-                if (repeatthu && timecondition) today.setText("Today");
-                else if (repeatfri) today.setText("Tomorrow");
-                else if (repeatsat) today.setText("Saturday");
-                else if (repeatsun) today.setText("Sunday");
-                else if (repeatmon) today.setText("Monday");
-                else if (repeattue) today.setText("Tuesday");
-                else if (repeatwed) today.setText("Wednesday");
-                else today.setText("Thursday");
+                if (repeatthu && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatfri){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatsat){ today.setText("Saturday"); dayfactor=2;}
+                else if (repeatsun){ today.setText("Sunday"); dayfactor=3;}
+                else if (repeatmon){ today.setText("Monday"); dayfactor=4;}
+                else if (repeattue){ today.setText("Tuesday"); dayfactor=5;}
+                else if (repeatwed){ today.setText("Wednesday"); dayfactor=6;}
+                else{ today.setText("Thursday"); dayfactor=6;}
                 break;
 
             case Calendar.FRIDAY:
 
-                if (repeatfri && timecondition) today.setText("Today");
-                else if (repeatsat) today.setText("Tomorrow");
-                else if (repeatsun) today.setText("Sunday");
-                else if (repeatmon) today.setText("Monday");
-                else if (repeattue) today.setText("Tuesday");
-                else if (repeatwed) today.setText("Wednesday");
-                else if (repeatthu) today.setText("Thursday");
-                else today.setText("Friday");
+                if (repeatfri && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatsat){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatsun){ today.setText("Sunday"); dayfactor=2;}
+                else if (repeatmon){ today.setText("Monday"); dayfactor=3;}
+                else if (repeattue){ today.setText("Tuesday"); dayfactor=4;}
+                else if (repeatwed){ today.setText("Wednesday"); dayfactor=5;}
+                else if (repeatthu){ today.setText("Thursday"); dayfactor=6;}
+                else{ today.setText("Friday"); dayfactor=7;}
                 break;
 
             case Calendar.SATURDAY:
 
-                if (repeatsat && timecondition) today.setText("Today");
-                else if (repeatsun) today.setText("Tomorrow");
-                else if (repeatmon) today.setText("Monday");
-                else if (repeattue) today.setText("Tuesday");
-                else if (repeatwed) today.setText("Wednesday");
-                else if (repeatthu) today.setText("Thursday");
-                else if (repeatfri) today.setText("Friday");
-                else today.setText("Saturday");
+                if (repeatsat && timecondition){ today.setText("Today"); dayfactor=0;}
+                else if (repeatsun){ today.setText("Tomorrow"); dayfactor=1;}
+                else if (repeatmon){ today.setText("Monday"); dayfactor=2;}
+                else if (repeattue){ today.setText("Tuesday"); dayfactor=3;}
+                else if (repeatwed){ today.setText("Wednesday"); dayfactor=4;}
+                else if (repeatthu){ today.setText("Thursday"); dayfactor=5;}
+                else if (repeatfri){ today.setText("Friday"); dayfactor=6;}
+                else{ today.setText("Saturday"); dayfactor=7;}
                 break;
         }
 
@@ -177,6 +183,19 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             weatherAT.setText("ON");
         }
 
+
+        long currentepoch = System.currentTimeMillis()/1000L;
+        long currentepochdate = currentepoch - currentepoch%86400L;
+
+        long arrivalepoch = currentepochdate + (sharedPref.getInt("sethour",9) + timezoneHourOffset)*60*60
+                + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
+                + dayfactor*86400;
+
+        edit.putLong("arrivaltime",arrivalepoch);
+
+
+
+
         if(sharedPref.getString("duration",null) == null)
             duration = null;
         else
@@ -190,11 +209,11 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         URL link;
         try {
             uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
-                    "origin=12.8614515,77.6647081&" +
-                    "destination=12.975686000000001,77.605852&" +
-                    "arrival_time=1506180000&" +
-                    "mode=driving&" +
-                    "key=ADD_YOUR_KEY");
+                    "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
+                    "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
+                    "&arrival_time="+ sharedPref.getLong("arrivaltime",3000000000L) +
+                    "&mode=driving" +
+                    "&key=");
 
             link = uri.toURL();
         } catch (Exception e) {
