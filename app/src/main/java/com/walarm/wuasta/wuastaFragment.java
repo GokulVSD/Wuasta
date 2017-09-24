@@ -12,6 +12,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +29,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     final int timezoneHourOffset = -5;
     final int timezoneMinuteOffset = -30;
-    int remake=0;
     Integer duration;
     public View v;
+    Toast toast;
 
     @Nullable
     @Override
@@ -38,21 +39,11 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         v = inflater.inflate(R.layout.wuastalayout, container, false);
 
-        SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
-        SharedPreferences.Editor edit2 = sharedPref.edit();
-
         CardView directions = (CardView) v.findViewById(R.id.navigationCard);
         directions.setOnClickListener(this);
 
-        if(sharedPref.getBoolean("recheck",true)) {
-            if (remake != 1) {
-                onViewCreated(v, savedInstanceState);
-                edit2.putBoolean("recheck", true);
-                remake++;
-            }
-            remake = 0;
-        }
-        edit2.commit();
+        Button setalarmbutton = (Button) v.findViewById(R.id.setalarmbutton);
+        setalarmbutton.setOnClickListener(this);
 
         return v;
     }
@@ -109,7 +100,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatthu){ today.setText("Thursday"); dayfactor=4;}
                 else if (repeatfri){ today.setText("Friday"); dayfactor=5;}
                 else if (repeatsat){ today.setText("Saturday"); dayfactor=6;}
-                else{ today.setText("Sunday"); dayfactor=0;}
+                else{ today.setText("Sunday"); dayfactor=7;}
                 break;
 
             case Calendar.MONDAY:
@@ -157,7 +148,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatmon){ today.setText("Monday"); dayfactor=4;}
                 else if (repeattue){ today.setText("Tuesday"); dayfactor=5;}
                 else if (repeatwed){ today.setText("Wednesday"); dayfactor=6;}
-                else{ today.setText("Thursday"); dayfactor=6;}
+                else{ today.setText("Thursday"); dayfactor=7;}
                 break;
 
             case Calendar.FRIDAY:
@@ -200,24 +191,21 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         }
 
 
-        long currentepoch = System.currentTimeMillis()/1000L;
-        long currentepochdate = currentepoch - currentepoch%86400L;
+        long currentepoch = System.currentTimeMillis()/1000;
+        long currentepochdate = (currentepoch+5*60*60+30*60) - (currentepoch+5*60*60+30*60)%86400;
 
         long departureepoch = currentepochdate + (sharedPref.getInt("sethour",9) + timezoneHourOffset)*60*60
                 + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
                 + dayfactor*86400;
 
-        departureepoch = departureepoch - 60*60L;
-
-        edit.putLong("departuretime",departureepoch);
-
-
-
+        departureepoch = departureepoch - 60*30;
 
         if(sharedPref.getString("duration",null) == null)
             duration = null;
         else
             duration = new Integer(sharedPref.getString("duration","0"));
+
+        edit.putInt("dayfactor",dayfactor);
 
         if(sharedPref.getBoolean("recheck",true) || duration == null){
 
@@ -229,9 +217,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
                     "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
                     "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
-                    "&departure_time="+ sharedPref.getLong("departuretime",3000000000L) +
+                    "&departure_time="+ departureepoch +
                     "&mode=driving" +
-                    "&key=ADD_KEY_HERE");
+                    "&key=ADD_YOUR_KEY_HERE");
 
             link = uri.toURL();
         } catch (Exception e) {
@@ -270,13 +258,37 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         SharedPreferences sp = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
 
-        String url = "http://maps.google.com/maps?saddr="+sp.getString("newhomelat","12.8614515")+","
-                +sp.getString("newhomelong","77.6647081")+"&daddr="+sp.getString("newworklat","12.975686000000001")
-                +","+sp.getString("newworklong","77.605852");
+        switch (view.getId()) {
 
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse(url));
-        startActivity(intent);
+            case R.id.navigationCard:
+                String url = "http://maps.google.com/maps?saddr=" + sp.getString("newhomelat", "12.8614515") + ","
+                    + sp.getString("newhomelong", "77.6647081") + "&daddr=" + sp.getString("newworklat", "12.975686000000001")
+                    + "," + sp.getString("newworklong", "77.605852");
+
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(url));
+            startActivity(intent);
+                break;
+
+            case R.id.setalarmbutton:
+
+                int df = sp.getInt("dayfactor",1);
+                int hur = sp.getInt("phour",0);
+                int mun = sp.getInt("pminute",0);
+
+                long currentepoch = System.currentTimeMillis();
+                long currentepochdate = (currentepoch+5*60*60*1000+30*60*1000) - (currentepoch+5*60*60*1000+30*60*1000)%86400000;
+                long timeofalarm = currentepochdate + (sp.getInt("phour",0))*60*60*1000
+                        + (sp.getInt("pminute",0))*60*1000 + df*86400000;
+
+                ((MainActivity)getActivity()).createAlarm(df,hur,mun);
+
+                if(toast != null) toast.cancel();
+                toast = Toast.makeText(getActivity(), "Alarm Set", Toast.LENGTH_LONG);
+                toast.show();
+                break;
+
+        }
 
     }
 

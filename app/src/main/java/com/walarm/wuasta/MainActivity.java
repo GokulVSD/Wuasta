@@ -1,5 +1,9 @@
 package com.walarm.wuasta;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.icu.util.Calendar;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -13,14 +17,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     private BottomNavigationView mBottomNav;
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
+
+        alarmManager = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
 
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -81,5 +88,19 @@ public class MainActivity extends AppCompatActivity {
             ft.commit();
 
         }
+    }
+
+    public void createAlarm(int df,int hour,int minute){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        //insert
+        calendar.set(Calendar.HOUR_OF_DAY,hour);
+        calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND,0);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 10, intent, 0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }
