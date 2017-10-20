@@ -80,7 +80,7 @@
 
 <br />
 
-*You must use your own API key, add it to the manifest, and the wuastafragment by replacing "ADD_YOUR_KEY_HERE"*
+*You must use your own API key, add it to the manifest, and the wuastaFragment.java by replacing "ADD_YOUR_KEY_HERE"*
 
 <br />
 
