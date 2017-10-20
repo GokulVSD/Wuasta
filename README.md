@@ -15,7 +15,7 @@
 
 ## 
 
-### Placeholder for video
+### Placeholder for GIF
 
 ## 
 
