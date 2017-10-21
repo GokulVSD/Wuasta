@@ -92,7 +92,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698">
+        app:layout_constraintVertical_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -259,7 +260,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.509"
+        app:layout_constraintVertical_bias="0.519"
         app:layout_constraintHorizontal_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
@@ -406,7 +407,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.867">
+        app:layout_constraintVertical_bias="0.881"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

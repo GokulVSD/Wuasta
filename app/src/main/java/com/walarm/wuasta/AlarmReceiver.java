@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.widget.Toast;
 
 /**
  * Created by gokul on 24-09-2017.
