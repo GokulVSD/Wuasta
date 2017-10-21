@@ -215,15 +215,15 @@
                 android:textColor="@color/emphasize"
                 android:textSize="32sp"
                 android:fontFamily="sans-serif-condensed"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintRight_toLeftOf="@+id/textView3"
+                android:layout_marginRight="-6dp"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/textView3"
-                android:layout_marginRight="8dp"
-                app:layout_constraintHorizontal_bias="0.642"
+                app:layout_constraintHorizontal_bias="0.773"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="71dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginTop="56dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -233,11 +233,11 @@
                 android:textStyle="bold"
                 android:textColor="@color/greyText"
                 android:text="AT"
+                android:id="@+id/textView3"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="38dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                android:id="@+id/textView3" />
+                android:layout_marginTop="18dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -248,15 +248,15 @@
                 android:id="@+id/destinationTextWeather"
                 android:textSize="32sp"
                 android:text="Work"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="71dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintLeft_toRightOf="@+id/textView3"
+                android:layout_marginLeft="22dp"
                 android:layout_marginRight="8dp"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/textView3"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintHorizontal_bias="0.495"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="56dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -267,15 +267,18 @@
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-condensed"
                 android:id="@+id/rainpercentage"
-                app:layout_constraintRight_toLeftOf="@+id/textView5"
-                android:layout_marginRight="7dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="125dp"
-                app:layout_constraintHorizontal_bias="1.0"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="7dp" />
+                android:layout_marginEnd="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/weatherdegrees"
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_marginLeft="106dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.276" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -285,17 +288,32 @@
                 android:textSize="18sp"
                 android:text="CHANCE OF RAIN"
                 android:fontFamily="sans-serif-condensed"
+                android:id="@+id/textView5"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/destinationTextWeather"
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_marginRight="7dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintHorizontal_bias="0.672" />
+
+            <TextView
+                android:id="@+id/weathercondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Scattered clouds"
+                android:textColor="@color/greyText"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintHorizontal_bias="0.623"
-                android:id="@+id/textView5"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="6dp"
-                app:layout_constraintVertical_bias="0.365"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.net.URL;
 
@@ -28,6 +32,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     String apikey="ADD_YOUR_KEY_HERE";
+    String weatherapikey="ADD_YOUR_WEATHER_KEY_HERE";
     final int timezoneHourOffset = -5;
     final int timezoneMinuteOffset = -30;
     Integer duration;
@@ -35,7 +40,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     Toast toast;
     int dayfactor;
     long departureepoch;
-    Integer tempfd=null;
+    Integer tempfd = null;
 
     @Nullable
     @Override
@@ -58,6 +63,15 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPref.edit();
+
+        TextView rain = (TextView) v.findViewById(R.id.rainpercentage);
+        rain.setText(sharedPref.getString("ppop","90%"));
+
+        TextView temperature = (TextView) v.findViewById(R.id.weatherdegrees);
+        temperature.setText(sharedPref.getString("ptemperature","26°C"));
+
+        TextView condition = (TextView) v.findViewById(R.id.weathercondition);
+        condition.setText(sharedPref.getString("pcondition","Scattered clouds"));
 
 
         TextView today = (TextView) view.findViewById(R.id.wuastaDay);
@@ -219,45 +233,47 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             edit.putInt("lastdaychecked",day);
 
-        URI uri;
-        URL link;
-        try {
-            uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
-                    "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
-                    "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
-                    "&departure_time="+ departureepoch +
-                    "&mode=driving" +
-                    "&key="+apikey);
+            setWeatherCard();
 
-            link = uri.toURL();
-        } catch (Exception e) {
-            link = null;
+            URI uri;
+            URL link;
+            try {
+                uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
+                        "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
+                        "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
+                        "&departure_time="+ departureepoch +
+                        "&mode=driving" +
+                        "&key="+apikey);
+
+                link = uri.toURL();
+            } catch (Exception e) {
+                link = null;
+            }
+
+            new AsyncTask<URL, Void, Integer>() {
+
+                @Override
+                protected void onPostExecute(Integer integer) {
+                    if(integer == null){
+                        Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                    }
+                    setDuration(integer);
+
+                    super.onPostExecute(integer);
+                }
+
+                @Override
+                protected Integer doInBackground(URL... params) {
+                    try {
+                        return new Integer(JSONCreaterFromStringURL.getDurationFromURL(params[0]));
+                    } catch (Exception e) {
+                        return null;
+                    }
+                }
+            }.execute(link);
+
         }
-
-        new AsyncTask<URL, Void, Integer>() {
-
-            @Override
-            protected void onPostExecute(Integer integer) {
-                if(integer == null){
-                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-                }
-                setDuration(integer);
-
-                super.onPostExecute(integer);
-            }
-
-            @Override
-            protected Integer doInBackground(URL... params) {
-                try {
-                    return new Integer(JSONCreaterFromStringURL.getDurationFromURL(params[0]));
-                } catch (Exception e) {
-                    return null;
-                }
-            }
-        }.execute(link);
-
-    }
-    edit.commit();
+        edit.commit();
         setTextView();
     }
 
@@ -270,12 +286,12 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.navigationCard:
                 String url = "http://maps.google.com/maps?saddr=" + sp.getString("newhomelat", "12.8614515") + ","
-                    + sp.getString("newhomelong", "77.6647081") + "&daddr=" + sp.getString("newworklat", "12.975686000000001")
-                    + "," + sp.getString("newworklong", "77.605852");
+                        + sp.getString("newhomelong", "77.6647081") + "&daddr=" + sp.getString("newworklat", "12.975686000000001")
+                        + "," + sp.getString("newworklong", "77.605852");
 
-            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse(url));
-            startActivity(intent);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                startActivity(intent);
                 break;
 
             case R.id.setalarmbutton:
@@ -360,7 +376,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             if(getTempfd() == null) break;
 
-            fd = getTempfd().intValue();
+            fd = getTempfd();
 
         }
 
@@ -411,8 +427,102 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     void setTempfd(Integer temporary){
         tempfd = temporary;
     }
+
     Integer getTempfd(){
         return tempfd;
+    }
+
+    void setWeatherCard(){
+
+        SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+
+        String weatherloc = sharedPref1.getString("weatherloc","Home");
+
+        String lathome,latwork,lonhome,lonwork;
+        String lat,lon;
+
+        lathome = sharedPref1.getString("newhomelat","12.8614515");
+        lonhome = sharedPref1.getString("newhomelong","77.6647081");
+        latwork = sharedPref1.getString("newworklat","12.975686000000001");
+        lonwork = sharedPref1.getString("newworklong","77.605852");
+
+        if(weatherloc.equals("Home")){
+            lat=lathome;
+            lon=lonhome;
+        }
+        else if(weatherloc.equals("Work")){
+            lat=latwork;
+            lon=lonwork;
+        }
+        else{
+            lat = ""+((Double.valueOf(lathome) + Double.valueOf(latwork))/2.0);
+            lon = ""+((Double.valueOf(lonhome) + Double.valueOf(lonwork))/2.0);
+        }
+
+        URI uri;
+        URL link;
+        try {
+            uri = new URI("https://api.weatherbit.io/v2.0/forecast/daily?" +
+                    "lat=" + lat +
+                    "&lon=" + lon +
+                    "&key="+weatherapikey);
+
+            link = uri.toURL();
+        } catch (Exception e) {
+            link = null;
+        }
+
+        new AsyncTask<URL, Void, String>() {
+
+            @Override
+            protected void onPostExecute(String wjson) {
+
+                setWeatherJSON(wjson);
+
+                super.onPostExecute(wjson);
+            }
+
+            @Override
+            protected String doInBackground(URL... params) {
+                try {
+                    return JSONCreaterFromStringURL.getWeatherJSON(params[0]);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }.execute(link);
+
+    }
+
+    void setWeatherJSON(String wjson){
+        if(wjson == null) return;
+
+        JSONArray wjarray;
+
+        try {
+            SharedPreferences sharedPref3 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
+            SharedPreferences.Editor edit3 = sharedPref3.edit();
+
+            wjarray = new JSONObject(wjson).getJSONArray("data");
+
+            TextView rain = (TextView) v.findViewById(R.id.rainpercentage);
+            rain.setText(wjarray.getJSONObject(dayfactor).getInt("pop") + "%");
+
+            TextView temperature = (TextView) v.findViewById(R.id.weatherdegrees);
+            temperature.setText(wjarray.getJSONObject(dayfactor).getInt("temp") + "°C");
+
+            TextView condition = (TextView) v.findViewById(R.id.weathercondition);
+            condition.setText(wjarray.getJSONObject(dayfactor).getJSONObject("weather").getString("description"));
+
+            edit3.putString("ppop",wjarray.getJSONObject(dayfactor).getInt("pop") + "%");
+            edit3.putString("ptemperature",wjarray.getJSONObject(dayfactor).getInt("temp") + "°C");
+            edit3.putString("pcondition",wjarray.getJSONObject(dayfactor).getJSONObject("weather").getString("description"));
+
+            edit3.commit();
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
 }

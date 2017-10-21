@@ -1,6 +1,7 @@
 package com.walarm.wuasta;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -40,8 +41,11 @@ public class JSONCreaterFromStringURL {
                 .getJSONArray("legs")
                 .getJSONObject(0)
                 .getJSONObject("duration_in_traffic");
-//                .getJSONObject(0);
 
         return (int)Math.ceil((json.getInt("value")/60.0));
+    }
+
+    public static String getWeatherJSON(URL url)throws Exception{
+        return getResponseFromHttpUrl(url);
     }
 }
