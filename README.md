@@ -11,7 +11,7 @@
 ## 
 
 <p align="center">Wuasta is an Android app written in Java that makes your mornings a lot less stressful. </p>
-<p align="center">With some parameters, such as your home location, work location, the amount of time you need in the morning to get ready, and the time at which you need to be at work, the app calls Google Maps Distance API, taking into account the traffic conditions based on historical traffic data, with an inital departure time. Based on the commute duration returned from the API call, the app calls the API again, now with an adjusted departure time based on whether or not the previous API call overshot or undershot its previous prediction (initial prediction being 30 mins). This process is repeated until a departure time is found such that the arrival time is within 3 mins of the specified time at which the user needs to be at work.   </p>
+<p align="center">With some parameters, such as your home location, work location, the amount of time you need in the morning to get ready, and the time at which you need to be at work, the app calls Google Maps Distance Matrix API, taking into account the traffic conditions based on historical traffic data, with an inital departure time. Based on the commute duration returned from the API call, the app calls the API again, now with an adjusted departure time based on whether or not the previous API call overshot or undershot its previous prediction (initial prediction being 30 mins). This process is repeated until a departure time is found such that the arrival time is within 3 mins of the specified time at which the user needs to be at work.   </p>
 
 ## 
 
@@ -50,9 +50,9 @@
 <br />
 
 ## APIs Used
-<p><strong>Google Maps Distance API</strong> for predicting departure time</p>
+<p><strong>Google Maps Distance Matrix API</strong> for predicting departure time</p>
 <p><strong>Google Maps Places API</strong> for picking home and work locations</p>
-<p><strong>Yahoo Weather API</strong> for predicted weather information at the time of departure</p>
+<p><strong>Weatherbit.io API</strong> for predicted weather information at the time of departure</p>
 
 
 
@@ -80,8 +80,9 @@
 
 <br />
 
-*You must use your own API key, add it to the manifest, and the wuastaFragment.java by replacing "ADD_YOUR_KEY_HERE"*
+*You must use your own API keys, add the Google API key to the manifest, and the wuastaFragment.java by replacing "ADD_YOUR_KEY_HERE",
+and add the Weatherbit.io API key to the wuastaFragment.java by replacing "ADD_YOUR_WEATHER_KEY_HERE".*
 
 <br />
 
-*The authors give permission to fork the repository and reuse code, but publishing code onto the play store with the core functionality of this app is strictly prohibited.*
+*The authors give permission to fork the repository and reuse code, but publishing code onto the play store with the core functionality of this app is prohibited.*
