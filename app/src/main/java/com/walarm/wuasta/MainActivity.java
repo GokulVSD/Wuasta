@@ -90,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createAlarm(int df,int hour,int minute){
+    public void createAlarm(int df, int hour, int minute){
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        //insert
         calendar.set(Calendar.HOUR_OF_DAY,hour);
         calendar.set(Calendar.MINUTE,minute);
         calendar.set(Calendar.SECOND,0);
+        calendar.add(Calendar.DATE,df);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 10, intent, 0);

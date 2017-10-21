@@ -35,7 +35,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     Toast toast;
     int dayfactor;
     long departureepoch;
-    Integer tempfd;
+    Integer tempfd=null;
 
     @Nullable
     @Override
@@ -280,18 +280,11 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.setalarmbutton:
 
-                int df = sp.getInt("dayfactor",1);
+                int df = sp.getInt("dayfactor",0);
                 int hur = sp.getInt("phour",0);
                 int mun = sp.getInt("pminute",0);
 
-                long currentepoch = System.currentTimeMillis();
-                long currentepochdate = (currentepoch+5*60*60*1000+30*60*1000) - (currentepoch+5*60*60*1000+30*60*1000)%86400000;
-                long timeofalarm = currentepochdate + (sp.getInt("phour",0))*60*60*1000
-                        + (sp.getInt("pminute",0))*60*1000 + df*86400000;
-
-                if(df==0) {
-                    ((MainActivity) getActivity()).createAlarm(df, hur, mun);
-                }
+                ((MainActivity) getActivity()).createAlarm(df, hur, mun);
 
                 if(toast != null) toast.cancel();
                 toast = Toast.makeText(getActivity(), "Alarm Set", Toast.LENGTH_LONG);
@@ -370,6 +363,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             fd = getTempfd().intValue();
 
         }
+
+        if(getTempfd() != null) sd = getTempfd();
 
         int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
 
