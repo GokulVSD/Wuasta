@@ -38,9 +38,7 @@
 
 ## 
 
-<br />
-
-<p align="center"><a href="https://imgur.com/ahjwoTN"><img src="https://i.imgur.com/ahjwoTN.png" title="source: imgur.com" /></a></p>
+### Placeholder for Screenshot
 
 <br />
 
@@ -77,8 +75,8 @@
 <br />
 
 ## Authors
-<p><strong>Gokul Vasudeva</strong>   https://github.com/gokulvsd</p>
-<p><strong>Anusha A</strong>   https://github.com/anushab05</p>
+<p><strong>Gokul Vasudeva</strong> 2nd year, PESIT</p>
+<p><strong>Placeholder</strong> 2nd year, PESIT</p>
 
 <br />
 
