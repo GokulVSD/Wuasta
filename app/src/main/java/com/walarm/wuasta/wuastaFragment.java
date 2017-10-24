@@ -40,7 +40,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     Toast toast;
     int dayfactor;
     long departureepoch;
-    Integer tempfd = null;
+    int prevtime;
 
     @Nullable
     @Override
@@ -216,12 +216,10 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
                 + dayfactor*86400;
 
-        departureepoch = departureepoch - 60*30;
-
         if(sharedPref.getString("duration",null) == null)
             duration = null;
         else
-            duration = new Integer(sharedPref.getString("duration","0"));
+            duration = Integer.valueOf(sharedPref.getString("duration","0"));
 
         edit.putInt("dayfactor",dayfactor);
 
@@ -233,47 +231,21 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             edit.putInt("lastdaychecked",day);
 
+            edit.commit();
+
             setWeatherCard();
 
-            URI uri;
-            URL link;
-            try {
-                uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
-                        "origin="+ sharedPref.getString("newhomelat","12.8614515") +","+ sharedPref.getString("newhomelong","77.6647081") +
-                        "&destination="+ sharedPref.getString("newworklat","12.975686000000001") +","+ sharedPref.getString("newworklong","77.605852") +
-                        "&departure_time="+ departureepoch +
-                        "&mode=driving" +
-                        "&key="+apikey);
+            prevtime = sharedPref.getInt("sethour",9)*60 + sharedPref.getInt("setminute",0) - 30;
 
-                link = uri.toURL();
-            } catch (Exception e) {
-                link = null;
-            }
+            toast = Toast.makeText(getActivity(), "Updating Wake Time...", Toast.LENGTH_LONG);
+            toast.show();
 
-            new AsyncTask<URL, Void, Integer>() {
-
-                @Override
-                protected void onPostExecute(Integer integer) {
-                    if(integer == null){
-                        Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-                    }
-                    setDuration(integer);
-
-                    super.onPostExecute(integer);
-                }
-
-                @Override
-                protected Integer doInBackground(URL... params) {
-                    try {
-                        return new Integer(JSONCreaterFromStringURL.getDurationFromURL(params[0]));
-                    } catch (Exception e) {
-                        return null;
-                    }
-                }
-            }.execute(link);
+            setDuration(Integer.valueOf(-1));
 
         }
+        else
         edit.commit();
+
         setTextView();
     }
 
@@ -316,26 +288,25 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
         SharedPreferences.Editor edit1 = sharedPref1.edit();
 
-        if(sd == null){
-            duration = null;
-            edit1.putString("duration",null);
-            return;
-        }
-
         int fd = sd.intValue();
 
         int hr = sharedPref1.getInt("sethour",9);
         int mn = sharedPref1.getInt("setminute",0);
 
-        int prevdeparturetime = hr*60 + mn - 30;
+        if(sd==null){
 
-        departureepoch += 30*60;
+            if(toast != null) toast.cancel();
+            toast = Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT);
+            toast.show();
 
-        while(fd + prevdeparturetime < (hr*60 + mn - 3) || fd + prevdeparturetime > (hr*60 + mn)){
+            duration = null;
+            edit1.putString("duration",null);
+            edit1.commit();
+        }
 
-            prevdeparturetime = hr*60 + mn - fd;
+        else if((prevtime + fd) < (hr*60 + mn - 3) || (prevtime + fd) > hr*60 + mn){
 
-            departureepoch -= fd*60;
+            prevtime = hr*60 + mn - fd;
 
             URI uri;
             URL link;
@@ -343,7 +314,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
                         "origin="+ sharedPref1.getString("newhomelat","12.8614515") +","+ sharedPref1.getString("newhomelong","77.6647081") +
                         "&destination="+ sharedPref1.getString("newworklat","12.975686000000001") +","+ sharedPref1.getString("newworklong","77.605852") +
-                        "&departure_time="+ departureepoch +
+                        "&departure_time="+ (departureepoch - (fd==-1?30:fd)*60) +
                         "&mode=driving" +
                         "&key="+apikey);
 
@@ -352,14 +323,12 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 link = null;
             }
 
-            departureepoch += fd*60;
-
             new AsyncTask<URL, Void, Integer>() {
 
                 @Override
                 protected void onPostExecute(Integer integer) {
 
-                    setTempfd(integer);
+                    setDuration(integer);
 
                     super.onPostExecute(integer);
                 }
@@ -367,42 +336,36 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 @Override
                 protected Integer doInBackground(URL... params) {
                     try {
-                        return new Integer(JSONCreaterFromStringURL.getDurationFromURL(params[0]));
+                        return JSONCreaterFromStringURL.getDurationFromURL(params[0]);
                     } catch (Exception e) {
                         return null;
                     }
                 }
             }.execute(link);
 
-            if(getTempfd() == null) break;
+        }
+        else{
 
-            fd = getTempfd();
+            int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
+
+            hr = settimeepoch >= 60 ? settimeepoch/60 : 0;
+            mn = settimeepoch%60;
+
+            edit1.putInt("phour",hr);
+            edit1.putInt("pminute",mn);
+
+            duration = sd;
+
+            edit1.putString("duration",sd.toString());
+            edit1.commit();
+
+            if(toast != null) toast.cancel();
+            toast = Toast.makeText(getActivity(), "Done!", Toast.LENGTH_SHORT);
+            toast.show();
+
+            setTextView();
 
         }
-
-        if(getTempfd() != null) sd = getTempfd();
-
-        int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
-
-        hr = settimeepoch >= 60 ? settimeepoch/60 : 0;
-        mn = settimeepoch%60;
-
-        edit1.putInt("phour",hr);
-        edit1.putInt("pminute",mn);
-
-        TextView suggtime = (TextView)v.findViewById(R.id.predictedTimeText);
-        if (hr > 12) {
-            suggtime.setText((hr - 12) + ":" + (mn > 9 ? "" : "0") + mn + " PM");
-        } else if (hr == 12) {
-            suggtime.setText(hr + ":" + (mn > 9 ? "" : "0") + mn + " PM");
-        } else {
-            suggtime.setText((hr == 0 ? 12 : hr) + ":" + (mn > 9 ? "" : "0") + mn + " AM");
-        }
-
-        duration = sd;
-
-        edit1.putString("duration",sd.toString());
-        edit1.commit();
     }
 
     void setTextView(){
@@ -422,14 +385,6 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             suggtime.setText((hr == 0 ? 12 : hr) + ":" + (mn > 9 ? "" : "0") + mn + " AM");
         }
 
-    }
-
-    void setTempfd(Integer temporary){
-        tempfd = temporary;
-    }
-
-    Integer getTempfd(){
-        return tempfd;
     }
 
     void setWeatherCard(){
