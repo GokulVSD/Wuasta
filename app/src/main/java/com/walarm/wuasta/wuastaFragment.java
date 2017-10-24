@@ -343,7 +343,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         SharedPreferences.Editor edit1 = sharedPref1.edit();
 
         //Newly calculated commute duration for this recursive iteration
-        int fd = sd.intValue();
+        int fd=-1;
+        if(sd != null)
+        fd = sd.intValue();
 
         //This is the "time to be at" recieved from Modify fragment
         int hr = sharedPref1.getInt("sethour",9);
