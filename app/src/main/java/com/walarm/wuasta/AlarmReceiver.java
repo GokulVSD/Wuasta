@@ -14,13 +14,22 @@ import android.net.Uri;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        //Pending intent calls calls this method
+
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+
+        //Incase a default Alarm ringtone is not set
         if (alarmUri == null)
         {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         }
+
+        //Ringtone is played
         Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
         ringtone.play();
+
+        //UI for the Alarm ringing is called
         Intent intent1 = new Intent(context, AlarmRingingActivity.class);
         context.startActivity(intent1);
     }

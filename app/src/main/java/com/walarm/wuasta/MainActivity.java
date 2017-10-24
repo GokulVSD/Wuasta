@@ -23,12 +23,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Setting up listeners and services, and saving a reference to the bottom navigation bar
+
         setContentView(R.layout.activity_main);
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
         alarmManager = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
 
+        //When a new item from the bottom nav bar is selected, (wuasta,modify,settings)
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     Toast toast;
     @Override
     public void onBackPressed(){
+
+        //If back button is pressed, you are prompted to press again, in order to exit
         if(backcounter==1){
             if(toast != null) toast.cancel();
             toast = Toast.makeText(this, "Press Again to Exit", Toast.LENGTH_SHORT);
@@ -61,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void selectFrag(MenuItem item){
+
+        /*
+        Called when a new item is selected.
+        Fragment is transacted based on which item was selected.
+         */
 
         Fragment frag = null;
 
@@ -92,12 +103,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void createAlarm(int df, int hour, int minute){
 
+        /*
+        This method is called from the Wuasta fragment. The time for which the alarm should be set is
+        passed as parameters, along with the dayfactor. (Check the Wuasta fragment to understand
+        the usage of dayfactor.
+         */
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY,hour);
         calendar.set(Calendar.MINUTE,minute);
         calendar.set(Calendar.SECOND,0);
         calendar.add(Calendar.DATE,df);
+
+        //New pending intent for the alarm reciever class, intent is run when epoch time in milliseconds is reached
 
         Intent intent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 10, intent, 0);

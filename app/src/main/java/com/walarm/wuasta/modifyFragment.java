@@ -34,6 +34,8 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        //Storing a reference to the views in this fragment, and setting listener for clock widget set button
+
         v = inflater.inflate(R.layout.modifylayout, container , false);
 
         Button timeset = (Button)v.findViewById(R.id.timesetbutton);
@@ -46,15 +48,24 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Called everytime this fragment is loaded up
+
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
+
+        //daycounter is a variable used to make sure that atleast one day is enabled for calculation of predicted time
         daycounter=0;
 
+        //Restoring the previous time selected in the clock widget
         ((TimePicker)view.findViewById(R.id.timePicker)).setHour(sharedPref.getInt("sethour",9));
         ((TimePicker)view.findViewById(R.id.timePicker)).setMinute(sharedPref.getInt("setminute",0));
 
+        //Incase Work was renamed from Settings fragment
         TextView timetobeat = (TextView)view.findViewById(R.id.timetobeattext);
         timetobeat.setText("TIME TO BE AT "+sharedPref.getString("workname","WORK").toUpperCase());
 
+
+
+        //Restoring previously selected repeat days and adding them to the listener
 
         ToggleButton sun = (ToggleButton)view.findViewById(R.id.suntoggle);
         sun.setChecked(sharedPref.getBoolean("sun",false));
@@ -91,6 +102,9 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         if(sat.isChecked()) daycounter++;
         sat.setOnCheckedChangeListener(this);
 
+
+        //Restoring previously selected Delay.
+        //It's restored in this way since delay is in the form of discreet buttons, totalling to upto 1 hour.
 
         totaldelay = sharedPref.getInt("delay",0);
 
@@ -157,6 +171,8 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
         plusthirty.setOnCheckedChangeListener(this);
 
 
+        //Choosing the location for which you wish to recieve weather information, and restoring from previous settings
+
         ToggleButton weatherhome = (ToggleButton)v.findViewById(R.id.weatherhome);
         weatherhome.setOnCheckedChangeListener(this);
 
@@ -181,9 +197,13 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        //Called when a toggle button is clicked
+
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
 
+        //Checking which button was clicked, and modifying settings accordingly.
+        //daycounter has to be atleast 1, never 0, since atleast one day must be selected for predicting wake time.
         switch (buttonView.getId()){
 
             case R.id.suntoggle: if(isChecked){
@@ -344,6 +364,9 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 break;
             case R.id.weatherhome: if(isChecked){
 
+                //This shenanigans is done since changing the state of the weather buttons calls the listener again,
+                //which we don't want.
+
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(null);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(null);
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setChecked(false);
@@ -359,6 +382,8 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
                 break;
             case R.id.weatherwork: if(isChecked){
 
+                //Same thing here.
+
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(null);
                 ((ToggleButton)v.findViewById(R.id.weatherenroute)).setOnCheckedChangeListener(null);
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setChecked(false);
@@ -373,6 +398,8 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
             }
                 break;
             case R.id.weatherenroute: if(isChecked){
+
+                //Same thing here.
 
                 ((ToggleButton)v.findViewById(R.id.weatherhome)).setOnCheckedChangeListener(null);
                 ((ToggleButton)v.findViewById(R.id.weatherwork)).setOnCheckedChangeListener(null);
@@ -394,6 +421,8 @@ public class modifyFragment extends Fragment implements CompoundButton.OnChecked
 
     @Override
     public void onClick(View view) {
+
+        //Called when a new "time to be at" is set from the clock widget. It is stored in sharedpreferences.
 
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();

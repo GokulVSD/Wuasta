@@ -31,10 +31,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class wuastaFragment extends Fragment implements View.OnClickListener {
 
+    //GMaps API Key
     String apikey="ADD_YOUR_KEY_HERE";
+    //Weatherbit.io API Key
     String weatherapikey="ADD_YOUR_WEATHER_KEY_HERE";
+
+    //Modify based on your timezone. Currently set to IST, which is GMT +5:30
     final int timezoneHourOffset = -5;
     final int timezoneMinuteOffset = -30;
+
     Integer duration;
     public View v;
     Toast toast;
@@ -42,11 +47,15 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     long departureepoch;
     int prevtime;
 
+    //Called at the beginning of fragment transacted in MainActivity for this fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        //Storing a reference to the views in the fragment
         v = inflater.inflate(R.layout.wuastalayout, container, false);
+
+        //Setting Listeners
 
         CardView directions = (CardView) v.findViewById(R.id.navigationCard);
         directions.setOnClickListener(this);
@@ -61,9 +70,13 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Called everytime this fragment is loaded up
+
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPref.edit();
 
+
+        //Restoring weather info
         TextView rain = (TextView) v.findViewById(R.id.rainpercentage);
         rain.setText(sharedPref.getString("ppop","90%"));
 
@@ -74,6 +87,9 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         condition.setText(sharedPref.getString("pcondition","Scattered clouds"));
 
 
+        /*Setting the day textview at the top of the fragment and the "time to be at" textview.
+        The day textview is set based on the day on which it is next set to (via the repeat days from modify fragment).
+         */
         TextView today = (TextView) view.findViewById(R.id.wuastaDay);
         TextView time = (TextView) view.findViewById(R.id.timeText);
 
@@ -101,13 +117,18 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         int currenthour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentmin = calendar.get(Calendar.MINUTE);
 
+        //Time condition takes care of the condition when it is still the same day, but the "time to be at" has passed
         boolean timecondition;
         if (currenthour < hour) timecondition = true;
         else if (currenthour == hour && currentmin <= min) timecondition = true;
         else timecondition = false;
 
+        /*We store the day for which the time is predicted here, eg: for today, dayfactor is 0, for tomorrow, it is 1,
+        ... upto 7 days, therefore dayfactor has values b/w 0...6
+         */
         dayfactor=0;
 
+        //Setting day textview and figuring out dayfactor
         switch (day) {
             case Calendar.SUNDAY:
 
@@ -194,9 +215,12 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
+
+        //Incase Work has been renamed from settings fragment
         TextView desttext = (TextView) view.findViewById(R.id.destinationText);
         desttext.setText(sharedPref.getString("workname", "Work"));
 
+        //Deals with symantics of the weather card
         TextView desttextweather = (TextView) view.findViewById(R.id.destinationTextWeather);
         desttextweather.setText(sharedPref.getString("weatherloc", "Work").equals("Work") ?
                 sharedPref.getString("workname", "Work") :
@@ -209,6 +233,10 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         }
 
 
+        /*
+        departureepoch is the epoch time in seconds, for the "time to be at" time
+        timezone plays a role since the API is based off of GMT
+         */
         long currentepoch = System.currentTimeMillis()/1000;
         long currentepochdate = (currentepoch+5*60*60+30*60) - (currentepoch+5*60*60+30*60)%86400;
 
@@ -216,14 +244,24 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
                 + dayfactor*86400;
 
+
+        //Previously calculated commute time (if it has been calculated, else null
         if(sharedPref.getString("duration",null) == null)
             duration = null;
         else
             duration = Integer.valueOf(sharedPref.getString("duration","0"));
 
+        //stores dayfactor for use in other methods
         edit.putInt("dayfactor",dayfactor);
 
 
+
+        /*
+        Recalculates predicted wake time based on 3 conditions,
+        1. If anything was changed in Modify fragment, or if locations were changed in Settings fragment
+        2. If commute time has never been calculated or if there was a network error on the previous attempt
+        3. If it is not the same day as the last calculation of predicted wake time
+         */
         if(sharedPref.getBoolean("recheck",true) || duration == null ||
                 sharedPref.getInt("lastdaychecked",day) != calendar.get(Calendar.DAY_OF_WEEK)){
 
@@ -233,29 +271,38 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
             edit.commit();
 
+
+            //Update weather information
             setWeatherCard();
 
+            //Previously calculated departure time, initially equal to "time to be at" minus 30 mins
             prevtime = sharedPref.getInt("sethour",9)*60 + sharedPref.getInt("setminute",0) - 30;
 
             toast = Toast.makeText(getActivity(), "Updating Wake Time...", Toast.LENGTH_LONG);
             toast.show();
 
+            //Update predicted time based on commute time, inital commute time being -1 mins
             setDuration(Integer.valueOf(-1));
 
         }
-        else
-        edit.commit();
+        else {
+            edit.commit();
 
-        setTextView();
+            //Updated predicted wake time textview with the latest calculated time
+            setTextView();
+        }
     }
 
     @Override
     public void onClick(View view) {
 
+        //Handling the click listeners
+
         SharedPreferences sp = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
 
         switch (view.getId()) {
 
+            //Creating and running intent for GMaps Navigation
             case R.id.navigationCard:
                 String url = "http://maps.google.com/maps?saddr=" + sp.getString("newhomelat", "12.8614515") + ","
                         + sp.getString("newhomelong", "77.6647081") + "&daddr=" + sp.getString("newworklat", "12.975686000000001")
@@ -266,6 +313,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
+            //Passing the time at which a new alarm should be created to createAlarm method in MainActivity
             case R.id.setalarmbutton:
 
                 int df = sp.getInt("dayfactor",0);
@@ -285,14 +333,23 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     public void setDuration(Integer sd){
 
+        /*
+        Recursively calling Gmaps API to get the correct commute time asynchronously.
+        API keeps getting called via an algorithm that works similarly to binary search.
+        Recursion continues until a commute time is found such that it is within ("time to to be at" - 3 mins, "time to be at")
+         */
+
         SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
         SharedPreferences.Editor edit1 = sharedPref1.edit();
 
+        //Newly calculated commute duration for this recursive iteration
         int fd = sd.intValue();
 
+        //This is the "time to be at" recieved from Modify fragment
         int hr = sharedPref1.getInt("sethour",9);
         int mn = sharedPref1.getInt("setminute",0);
 
+        //Async task returned null, usually due to network error/no network
         if(sd==null){
 
             if(toast != null) toast.cancel();
@@ -304,10 +361,15 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             edit1.commit();
         }
 
+        //Async task that calls this method again on completion of the async task
         else if((prevtime + fd) < (hr*60 + mn - 3) || (prevtime + fd) > hr*60 + mn){
 
+            //Changing previously predicted time to this recursive iterations time
             prevtime = hr*60 + mn - fd;
 
+            /*Building a new link for API call, if first iteration, then fd is -1, so departureepoch is subtracted by 30 mins
+            (initially assumed predicted time is always 30 mins before the "time to be at")
+             */
             URI uri;
             URL link;
             try {
@@ -323,6 +385,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 link = null;
             }
 
+            //Async task is run with the newly made URL
             new AsyncTask<URL, Void, Integer>() {
 
                 @Override
@@ -344,16 +407,21 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             }.execute(link);
 
         }
+
+        //Recursion termination condition is satisfied, a new commute time is found, which is fd
         else{
 
+            //"delay" is from Modify fragment, it's the additional time that the user requested, in order to get ready
             int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
 
             hr = settimeepoch >= 60 ? settimeepoch/60 : 0;
             mn = settimeepoch%60;
 
+            //Storing the predicted wake time
             edit1.putInt("phour",hr);
             edit1.putInt("pminute",mn);
 
+            //So that the one of the three conditions for calculating new predicted wake time is not satisfied anymore
             duration = sd;
 
             edit1.putString("duration",sd.toString());
@@ -363,12 +431,15 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             toast = Toast.makeText(getActivity(), "Done!", Toast.LENGTH_SHORT);
             toast.show();
 
+            //Setting predicted time textview with the newly found predicted time
             setTextView();
 
         }
     }
 
     void setTextView(){
+
+        //Sets predicted wake time textview
 
         SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
 
@@ -388,6 +459,11 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
     }
 
     void setWeatherCard(){
+
+        /*
+        Weatherbit.io API is used for weather info, weather info can be shown for 3 locations, home, work and enroute.
+        enroute is the midpoint between home and work.
+         */
 
         SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
 
@@ -414,6 +490,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             lon = ""+((Double.valueOf(lonhome) + Double.valueOf(lonwork))/2.0);
         }
 
+        //New URL for API call
         URI uri;
         URL link;
         try {
@@ -427,6 +504,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             link = null;
         }
 
+        //Getting info from API call asynchronously. setWeatherJSON() method is called on completion
         new AsyncTask<URL, Void, String>() {
 
             @Override
@@ -449,11 +527,25 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
     void setWeatherJSON(String wjson){
+
+        /*
+        Data is extracted from JSON, and stored.
+        JSON contains a wide list of weather information for the next 16 days including today.
+        We use the stored dayfactor, containing (0...6) to get the wather info
+        for the particular day that the next predicted time is calculated for. 0 is for todays info,
+        6 is for the weather info for 6 days from now.
+         */
         if(wjson == null) return;
 
         JSONArray wjarray;
 
+        /*Weather info is put into the respective textviews.
+        "pop" gives the percentage chance of precipitation
+        "temp" is the average weather for the day
+        "description" is a few word description of the day's weather
+         */
         try {
             SharedPreferences sharedPref3 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
             SharedPreferences.Editor edit3 = sharedPref3.edit();

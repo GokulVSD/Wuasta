@@ -38,6 +38,8 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        //Stores a reference to the views, and sets listeners. Called when fragment creation is requested.
+
         v = inflater.inflate(R.layout.settingslayout , container , false);
 
         Button homePicker = (Button)v.findViewById(R.id.changehomelocationbutton);
@@ -56,6 +58,8 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Once the view is created, the previously selected Home and Work are restored.
+
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
 
         ((TextView)view.findViewById(R.id.currenthome)).setText(sharedPreferences.getString("homeplace","PESIT South Campus"));
@@ -64,11 +68,18 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view){
+
+        //User wants to pick a new location for either Home or Work.
+
+        //Google's Placepicker API. an Intent is created, with a result from the intent being expected.
+
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
 
+        //Checking which location is being modified, condition codes 1 and 2 are passed so that
+        //we know which location was updated when the intent result arrives.
         switch (view.getId()) {
 
             case R.id.changehomelocationbutton:
@@ -89,11 +100,15 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 break;
+
+            //If you had clicked the button to replace the name of "Work" throughout the app.
             case R.id.renameworkbutton:
                 EditText workedit = (EditText)v.findViewById(R.id.renameworktext);
 
+                //If button was clicked on accident, or no new name was typed
                 if(workedit.getText().toString().equals("")) break;
 
+                //Can't have more than 10 characters due to formatting of app layout
                 else if(workedit.getText().toString().length()>10) {
 
                     if(toast != null) toast.cancel();
@@ -117,6 +132,7 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //If no network, or the place picking was cancelled midway
         if(data == null) return;
 
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("wuastafile",MODE_PRIVATE);
@@ -127,6 +143,8 @@ public class settingsFragment extends Fragment implements View.OnClickListener {
         String placeName;
 
         if (resultCode == RESULT_OK) {
+
+            //Checking request code that was used to create the intent, 1 for Home location, 2 for Work locations
             switch (requestCode){
                 case 1:
                     placeName = String.format("%s", place.getName());
