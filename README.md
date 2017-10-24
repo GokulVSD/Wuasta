@@ -15,7 +15,8 @@
 
 ## 
 
-### Placeholder for GIF
+<img src="https://media.giphy.com/media/3ov9jDlwwCcW0vHTW0/giphy.gif" width="33%" /> <img src="https://media.giphy.com/media/l378rjcaWyElged7G/giphy.gif" width="33%" /> 
+<img src="https://media.giphy.com/media/3ov9k91ni6ILZV7fGw/giphy.gif" width="33%" />
 
 ## 
 
@@ -30,7 +31,7 @@
 
 <br />
 
-<p align="center">It usually takes about 3 to 4 API calls to get the correct predicted departure time. </p>
+<p align="center">It usually takes about 3 to 4 API calls to get the correct predicted departure time. The API Calls are made asynchronously via a recursive function.</p>
 
 <br />
 
@@ -38,7 +39,9 @@
 
 ## 
 
-### Placeholder for Screenshot
+<br />
+
+<p align="center"><a href="https://imgur.com/ahjwoTN"><img src="https://i.imgur.com/ahjwoTN.png" title="source: imgur.com" /></a></p>
 
 <br />
 
@@ -75,8 +78,8 @@
 <br />
 
 ## Authors
-<p><strong>Gokul Vasudeva</strong> 2nd year, PESIT</p>
-<p><strong>Placeholder</strong> 2nd year, PESIT</p>
+<p><strong>Gokul Vasudeva</strong>   https://github.com/gokulvsd</p>
+<p><strong>Anusha A</strong>   https://github.com/anushab05</p>
 
 <br />
 
