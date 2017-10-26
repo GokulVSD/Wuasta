@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         SharedPreferences sharedPref = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPref.edit();
 
+        //Restoring previous predicted time
+        setTextView();
 
         //Restoring weather info
         TextView rain = (TextView) v.findViewById(R.id.rainpercentage);
@@ -117,14 +120,45 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         int currenthour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentmin = calendar.get(Calendar.MINUTE);
 
-        //Time condition takes care of the condition when it is still the same day, but the "time to be at" has passed
+        //Previously calculated commute time (if it has been calculated, else null
+        if(sharedPref.getString("duration",null) == null)
+            duration = null;
+        else
+            duration = Integer.valueOf(sharedPref.getString("duration","0"));
+
+        long currentepoch = System.currentTimeMillis()/1000;
+        long currentepochdate = (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)
+                - (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)%86400;
+
+        if((sharedPref.getBoolean("recheck",false) || sharedPref.getLong("thatday",currentepochdate)!=currentepochdate)
+                && !sharedPref.getBoolean("today",false)){
+
+            edit.putString("duration",null);
+            edit.putBoolean("today",true);
+
+            edit.commit();
+
+            FragmentTransaction ftr1 = getFragmentManager().beginTransaction();
+            ftr1.detach(wuastaFragment.this).attach(wuastaFragment.this).commit();
+        }
+
+        if(!sharedPref.getBoolean("today",true)){
+        if(toast != null) toast.cancel();
+        toast = Toast.makeText(getActivity(), "Predicted time has passed, checking for the next possible day...", Toast.LENGTH_LONG);
+        toast.show();}
+
+        //Time condition takes care of the condition when it is still the same day, but the predicted time to wake has passed
         boolean timecondition;
-        if (currenthour < hour) timecondition = true;
-        else if (currenthour == hour && currentmin <= min) timecondition = true;
-        else timecondition = false;
+        if(currenthour > hour || (currenthour == hour && currentmin >= min))
+            timecondition = false;
+        else if(sharedPref.getBoolean("today",true))
+            timecondition = true;
+        else{
+            timecondition = false;
+        }
 
         /*We store the day for which the time is predicted here, eg: for today, dayfactor is 0, for tomorrow, it is 1,
-        ... upto 7 days, therefore dayfactor has values b/w 0...6
+        ... upto 7 days, therefore dayfactor has values b/w 0...7
          */
         dayfactor=0;
 
@@ -139,7 +173,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatthu){ today.setText("Thursday"); dayfactor=4;}
                 else if (repeatfri){ today.setText("Friday"); dayfactor=5;}
                 else if (repeatsat){ today.setText("Saturday"); dayfactor=6;}
-                else{ today.setText("Sunday"); dayfactor=7;}
+                else{ today.setText("Next Sunday"); dayfactor=7;}
                 break;
 
             case Calendar.MONDAY:
@@ -151,7 +185,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatfri){ today.setText("Friday"); dayfactor=4;}
                 else if (repeatsat){ today.setText("Saturday"); dayfactor=5;}
                 else if (repeatsun){ today.setText("Sunday"); dayfactor=6;}
-                else{ today.setText("Monday"); dayfactor=7;}
+                else{ today.setText("Next Monday"); dayfactor=7;}
                 break;
 
             case Calendar.TUESDAY:
@@ -163,7 +197,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatsat){ today.setText("Saturday"); dayfactor=4;}
                 else if (repeatsun){ today.setText("Sunday"); dayfactor=5;}
                 else if (repeatmon){ today.setText("Monday"); dayfactor=6;}
-                else{ today.setText("Tuesday"); dayfactor=7;}
+                else{ today.setText("Next Tuesday"); dayfactor=7;}
                 break;
 
             case Calendar.WEDNESDAY:
@@ -175,7 +209,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatsun){ today.setText("Sunday"); dayfactor=4;}
                 else if (repeatmon){ today.setText("Monday"); dayfactor=5;}
                 else if (repeattue){ today.setText("Tuesday"); dayfactor=6;}
-                else{ today.setText("Wednesday"); dayfactor=7;}
+                else{ today.setText("Next Wednesday"); dayfactor=7;}
                 break;
 
             case Calendar.THURSDAY:
@@ -187,7 +221,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatmon){ today.setText("Monday"); dayfactor=4;}
                 else if (repeattue){ today.setText("Tuesday"); dayfactor=5;}
                 else if (repeatwed){ today.setText("Wednesday"); dayfactor=6;}
-                else{ today.setText("Thursday"); dayfactor=7;}
+                else{ today.setText("Next Thursday"); dayfactor=7;}
                 break;
 
             case Calendar.FRIDAY:
@@ -199,7 +233,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeattue){ today.setText("Tuesday"); dayfactor=4;}
                 else if (repeatwed){ today.setText("Wednesday"); dayfactor=5;}
                 else if (repeatthu){ today.setText("Thursday"); dayfactor=6;}
-                else{ today.setText("Friday"); dayfactor=7;}
+                else{ today.setText("Next Friday"); dayfactor=7;}
                 break;
 
             case Calendar.SATURDAY:
@@ -211,7 +245,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 else if (repeatwed){ today.setText("Wednesday"); dayfactor=4;}
                 else if (repeatthu){ today.setText("Thursday"); dayfactor=5;}
                 else if (repeatfri){ today.setText("Friday"); dayfactor=6;}
-                else{ today.setText("Saturday"); dayfactor=7;}
+                else{ today.setText("Next Saturday"); dayfactor=7;}
                 break;
         }
 
@@ -237,33 +271,25 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         departureepoch is the epoch time in seconds, for the "time to be at" time
         timezone plays a role since the API is based off of GMT
          */
-        long currentepoch = System.currentTimeMillis()/1000;
-        long currentepochdate = (currentepoch+5*60*60+30*60) - (currentepoch+5*60*60+30*60)%86400;
 
         departureepoch = currentepochdate + (sharedPref.getInt("sethour",9) + timezoneHourOffset)*60*60
                 + (sharedPref.getInt("setminute",0)+timezoneMinuteOffset)*60
                 + dayfactor*86400;
 
-
-        //Previously calculated commute time (if it has been calculated, else null
-        if(sharedPref.getString("duration",null) == null)
-            duration = null;
-        else
-            duration = Integer.valueOf(sharedPref.getString("duration","0"));
-
         //stores dayfactor for use in other methods
         edit.putInt("dayfactor",dayfactor);
 
-
+        boolean prevpredictedtimepassed = false;
+        if(currentepoch >= sharedPref.getLong("prevpredictedtime",0))
+            prevpredictedtimepassed = true;
 
         /*
         Recalculates predicted wake time based on 3 conditions,
         1. If anything was changed in Modify fragment, or if locations were changed in Settings fragment
         2. If commute time has never been calculated or if there was a network error on the previous attempt
-        3. If it is not the same day as the last calculation of predicted wake time
+        3. Previous predicted time has passed.
          */
-        if(sharedPref.getBoolean("recheck",true) || duration == null ||
-                sharedPref.getInt("lastdaychecked",day) != calendar.get(Calendar.DAY_OF_WEEK)){
+        if(sharedPref.getBoolean("recheck",true) || duration == null || prevpredictedtimepassed){
 
             edit.putBoolean("recheck",false);
 
@@ -275,8 +301,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             //Update weather information
             setWeatherCard();
 
-            //Previously calculated departure time, initially equal to "time to be at" minus 30 mins
-            prevtime = sharedPref.getInt("sethour",9)*60 + sharedPref.getInt("setminute",0) - 30;
+            //Previously calculated departure time, initially equal to "time to be at"
+            prevtime = sharedPref.getInt("sethour",9)*60 + sharedPref.getInt("setminute",0);
 
             toast = Toast.makeText(getActivity(), "Updating Wake Time...", Toast.LENGTH_LONG);
             toast.show();
@@ -317,8 +343,10 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             case R.id.setalarmbutton:
 
                 int df = sp.getInt("dayfactor",0);
-                int hur = sp.getInt("phour",0);
+                int hur = sp.getInt("phour",9);
                 int mun = sp.getInt("pminute",0);
+
+                if(sp.getBoolean("midnightcondition",false)) df--;
 
                 ((MainActivity) getActivity()).createAlarm(df, hur, mun);
 
@@ -350,6 +378,45 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         //This is the "time to be at" recieved from Modify fragment
         int hr = sharedPref1.getInt("sethour",9);
         int mn = sharedPref1.getInt("setminute",0);
+        int hr1=9,mn1=0;
+        boolean midnightcondition=false;
+
+
+        if(sd != null) {
+            //"delay" is from Modify fragment, it's the additional time that the user requested, in order to get ready
+            int settimeepoch = hr * 60 + mn - fd - sharedPref1.getInt("delay", 0);
+
+
+            if(settimeepoch < 0){
+                midnightcondition = true;
+                settimeepoch = 24*60 + settimeepoch;
+            }
+
+            hr1 = settimeepoch >= 60 ? settimeepoch / 60 : 0;
+            mn1 = settimeepoch % 60;
+
+
+            Calendar calendar = Calendar.getInstance();
+            int currenthour = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentmin = calendar.get(Calendar.MINUTE);
+
+            if ((dayfactor - (midnightcondition?1:0)) == 0 && (currenthour > hr1 || (currenthour == hr1 && currentmin >= mn1))) {
+
+                long currentepoch = System.currentTimeMillis()/1000;
+                long currentepochdate = (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)
+                        - (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)%86400;
+
+                edit1.putString("duration", null);
+                edit1.putBoolean("today", false);
+                edit1.putLong("thatday",currentepochdate);
+
+                edit1.commit();
+
+                FragmentTransaction ftr1 = getFragmentManager().beginTransaction();
+                ftr1.detach(wuastaFragment.this).attach(wuastaFragment.this).commit();
+            }
+        }
+
 
         //Async task returned null, usually due to network error/no network
         if(sd==null){
@@ -364,13 +431,13 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         }
 
         //Async task that calls this method again on completion of the async task
-        else if((prevtime + fd) < (hr*60 + mn - 3) || (prevtime + fd) > hr*60 + mn){
+        else if(((prevtime + fd) < (hr*60 + mn - 3) || (prevtime + fd) > hr*60 + mn) || fd == -1){
 
             //Changing previously predicted time to this recursive iterations time
             prevtime = hr*60 + mn - fd;
 
-            /*Building a new link for API call, if first iteration, then fd is -1, so departureepoch is subtracted by 30 mins
-            (initially assumed predicted time is always 30 mins before the "time to be at")
+            /*Building a new link for API call, if first iteration, then fd is -1, so departureepoch is not subtracted
+            (initially assumed predicted time is always 0 mins before the "time to be at")
              */
             URI uri;
             URL link;
@@ -378,7 +445,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
                 uri = new URI("https://maps.googleapis.com/maps/api/directions/json?" +
                         "origin="+ sharedPref1.getString("newhomelat","12.8614515") +","+ sharedPref1.getString("newhomelong","77.6647081") +
                         "&destination="+ sharedPref1.getString("newworklat","12.975686000000001") +","+ sharedPref1.getString("newworklong","77.605852") +
-                        "&departure_time="+ (departureepoch - (fd==-1?30:fd)*60) +
+                        "&departure_time="+ (departureepoch - (fd==-1?0:fd)*60) +
                         "&mode=driving" +
                         "&key="+apikey);
 
@@ -413,18 +480,23 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
         //Recursion termination condition is satisfied, a new commute time is found, which is fd
         else{
 
-            //"delay" is from Modify fragment, it's the additional time that the user requested, in order to get ready
-            int settimeepoch = hr*60 + mn - fd - sharedPref1.getInt("delay",0);
-
-            hr = settimeepoch >= 60 ? settimeepoch/60 : 0;
-            mn = settimeepoch%60;
-
             //Storing the predicted wake time
-            edit1.putInt("phour",hr);
-            edit1.putInt("pminute",mn);
+            edit1.putInt("phour",hr1);
+            edit1.putInt("pminute",mn1);
+
+            edit1.putBoolean("midnightcondition",midnightcondition);
 
             //So that the one of the three conditions for calculating new predicted wake time is not satisfied anymore
             duration = sd;
+
+            long currentepoch = System.currentTimeMillis()/1000;
+            long currentepochdate = (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)
+                    - (currentepoch-timezoneHourOffset*60*60-timezoneMinuteOffset*60)%86400;
+            long temp = currentepochdate + (hr1 + timezoneHourOffset)*60*60
+                    + (mn1+timezoneMinuteOffset)*60
+                    + (dayfactor - (midnightcondition?1:0))*86400;
+
+            edit1.putLong("prevpredictedtime",temp);
 
             edit1.putString("duration",sd.toString());
             edit1.commit();
@@ -445,8 +517,8 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
 
         SharedPreferences sharedPref1 = this.getActivity().getSharedPreferences("wuastafile", MODE_PRIVATE);
 
-        int hr = sharedPref1.getInt("phour",0);
-        int mn = sharedPref1.getInt("pminute",0);
+        int hr = sharedPref1.getInt("phour",8);
+        int mn = sharedPref1.getInt("pminute",30);
 
         TextView suggtime = (TextView)v.findViewById(R.id.predictedTimeText);
 
