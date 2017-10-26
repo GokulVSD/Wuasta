@@ -11,7 +11,7 @@
 ## 
 
 <p align="center">Wuasta is an Android app written in Java that makes your mornings a lot less stressful. </p>
-<p align="center">With some parameters, such as your home location, work location, the amount of time you need in the morning to get ready, and the time at which you need to be at work, the app calls Google Maps Distance Matrix API, taking into account the traffic conditions based on historical traffic data, with an inital departure time. Based on the commute duration returned from the API call, the app calls the API again, now with an adjusted departure time based on whether or not the previous API call overshot or undershot its previous prediction (initial prediction being 30 mins). This process is repeated until a departure time is found such that the arrival time is within 3 mins of the specified time at which the user needs to be at work.   </p>
+<p align="center">With some parameters, such as your home location, work location, the amount of time you need in the morning to get ready, and the time at which you need to be at work, the app calls Google Maps Distance Matrix API, taking into account the traffic conditions based on historical traffic data, with an inital departure time. Based on the commute duration returned from the API call, the app calls the API again, now with an adjusted departure time based on whether or not the previous API call overshot or undershot its previous prediction. This process is repeated until a departure time is found such that the arrival time is within 3 mins of the specified time at which the user needs to be at work.   </p>
 
 ## 
 
@@ -21,13 +21,15 @@
 ## 
 
 <strong>Example:</strong>
-<p align="center">Lets say you need to reach your work at 9:00 AM. The first API call is made with a departure time of 8:30 AM. The API then returns a commute duration of 20 mins (undershot, because leaving your home at 8:30 would result in reaching your work at 8:50 AM).</p>
+<p align="center">Lets say you need to reach your work at 9:00 AM. The first API call is made with a departure time of 9:00 AM. The API then returns a commute duration of 20 mins.</p>
 
-<p align="center">The API is called again, now with a departure time of 9:00 AM minus 20 mins, i.e. 8:40 AM. The API returns a commute duration of 23 mins (since traffic would've increased if you depart at 8:40 AM, as opposed to 8:30 AM). This means that you'll arrive at work at 9:03 AM if you leave at 8:40 AM (overshot).</p>
+<p align="center">The API is called again, now with a departure time of 9:00 AM minus 20 mins, i.e. 8:40 AM. The API returns a commute duration of 16 mins (since traffic would be slightly lesser if you depart at 8:40 AM, as opposed to 9:00 AM). This means that you'll arrive at work at 8:56 AM if you leave at 8:40 AM (undershot).</p>
 
-<p align="center">The API is called again, now with a departure time of 9:00 AM minus 23 mins, i.e. 8:37 AM. The API returns a commute duration of 22 mins (since there is slightly lesser traffic by leaving 3 mins earlier than the previous departure time). This means that you'll arrive at work at 8:37 + 22 mins = 8:59 AM. Now 8:59 AM is greater than 8:57 AM, and lesser than 9:00 AM (3 mins of cushion time).</p>
+<p align="center">The API is called again, now with a departure time of 9:00 AM minus 16 mins, i.e. 8:44 AM. The API returns a commute duration of 18 mins (since there is slightly greater traffic by leaving at 8:44 as opposed to 8:40). This means that you'll arrive at work at 8:44 + 18 mins = 9:02 AM (overshot).</p>
 
-<p align="center">Now, the app subtracts the time that the user requires to get ready in the morning, say 30 mins (referred to as "delay" in the app), and suggests setting an alarm at 8:07 AM (8:37 AM minus 30 mins). Therefore, if you wake up 8:07 AM, and all goes well, and you finish getting ready within those 30 mins and start the commute to your work, you'll reach your work exactly at the time you wanted to reach, i.e. 8:59 AM, approximately 9:00 AM.</p>
+<p align="center">The API is called again, now with a departure time of 9:00 AM minus 18 mins, i.e. 8:42 AM. The API returns a commute duration of 17 mins (since there is slightly lesser traffic by leaving at 8:42 as opposed to 8:44). This means that you'll arrive at work at 8:42 + 17 mins = 8:59 AM. Now 8:59 AM is greater than 8:57 AM, and lesser than 9:00 AM (3 mins of cushion time).</p>
+
+<p align="center">Now, the app subtracts the time that the user requires to get ready in the morning, say 30 mins (referred to as "delay" in the app), and suggests setting an alarm at 8:12 AM (8:42 AM minus 30 mins). Therefore, if you wake up 8:12 AM, and all goes well, and you finish getting ready within those 30 mins and start the commute to your work, you'll reach your work exactly at the time you wanted to reach, i.e. 8:59 AM, approximately 9:00 AM.</p>
 
 <br />
 
