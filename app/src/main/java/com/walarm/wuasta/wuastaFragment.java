@@ -142,7 +142,7 @@ public class wuastaFragment extends Fragment implements View.OnClickListener {
             ftr1.detach(wuastaFragment.this).attach(wuastaFragment.this).commit();
         }
 
-        if(!sharedPref.getBoolean("today",true)){
+        if(!sharedPref.getBoolean("today",true) && duration == null){
         if(toast != null) toast.cancel();
         toast = Toast.makeText(getActivity(), "Predicted time has passed, checking for the next possible day...", Toast.LENGTH_LONG);
         toast.show();}
