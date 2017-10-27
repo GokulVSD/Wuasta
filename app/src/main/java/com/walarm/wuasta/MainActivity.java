@@ -64,12 +64,22 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    //temp
+    /*
+    onResume runs when the app is reopened
+    onStop runs when the app is closed
+    For certain cases where wuastaFragment needs to be updated, the app refreshes the wuastaFragment
+    once when the app is reopened after being closed.
+    for eg: If your previous network call failed and you close the app, because of these two methods,
+    the fragment is refreshed, and the network call is made again.
+    if it were not for these methods, you would manually have to switch to another fragment and
+    switch back to get the fragment to refresh.
+     */
     boolean refresh = false;
     @Override
     public void onResume() {
 
         if(refresh && mBottomNav.getSelectedItemId() == R.id.menu_wuasta) {
+
             refresh = false;
             Fragment frag = new wuastaFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.container,frag).commit();
@@ -84,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStop();
     }
+
+
 
     private void selectFrag(MenuItem item){
 
