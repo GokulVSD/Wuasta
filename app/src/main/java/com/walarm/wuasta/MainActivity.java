@@ -64,7 +64,25 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    boolean refresh = false;
+    @Override
+    public void onResume() {
 
+        if(refresh && mBottomNav.getSelectedItemId() == R.id.menu_wuasta) {
+            refresh = false;
+            Fragment frag = new wuastaFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,frag).commit();
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+
+        refresh = true;
+
+        super.onStop();
+    }
 
     private void selectFrag(MenuItem item){
 
