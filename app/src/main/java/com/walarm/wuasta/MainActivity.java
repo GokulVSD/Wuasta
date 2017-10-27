@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    //temp
     boolean refresh = false;
     @Override
     public void onResume() {
