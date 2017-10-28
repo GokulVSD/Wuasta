@@ -71,11 +71,12 @@
  <br />
 
 ## InGenius 2017
-  Written through the course of the 24-hour hackathon
-  
-#### *Started: September 20th, 2017*
+  Designed and Written through the course of the 24-hour hackathon held on September 24th, 2017.
 
-#### *Finished: September 24th, 2017*
+<br />
+
+## Kalpana 2017
+  Presented during the first ever iteration of PESIT's IEEE charity project exhibition, Kalpana, held on October 28th, 2017.
 
 <br />
 
@@ -85,9 +86,11 @@
 
 <br />
 
+##
 *You must use your own API keys, add the Google API key to the manifest, and the wuastaFragment.java by replacing "ADD_YOUR_KEY_HERE",
 and add the Weatherbit.io API key to the wuastaFragment.java by replacing "ADD_YOUR_WEATHER_KEY_HERE".*
 
 <br />
 
+##
 *The authors give permission to fork the repository and reuse code, but publishing code onto the play store with the core functionality of this app is prohibited.*
