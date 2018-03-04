@@ -26,7 +26,7 @@ import static android.content.Context.CONTEXT_RESTRICTED;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by gokul on 18-09-2017.
+ * Created by AnushaB05 GokulVSD on 18-09-2017.
  */
 
 public class settingsFragment extends Fragment implements View.OnClickListener {
