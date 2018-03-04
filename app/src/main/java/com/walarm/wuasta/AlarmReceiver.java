@@ -8,7 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 
 /**
- * Created by gokul on 24-09-2017.
+ * Created by AnushaB05 & GokulVSD on 24-09-2017.
  */
 
 public class AlarmReceiver extends BroadcastReceiver {
