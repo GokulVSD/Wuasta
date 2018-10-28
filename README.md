@@ -15,8 +15,8 @@
 
 ## 
 
-<img src="/art/1.gif" width="32%" /> <img src="/art/2.gif" width="32%" /> 
-<img src="/art/3.gif" width="32%" />
+<img src="/art/1.gif/raw=true" width="32%" /> <img src="/art/2.gif/raw=true" width="32%" /> 
+<img src="/art/3.gif/raw=true" width="32%" />
 
 ## 
 
